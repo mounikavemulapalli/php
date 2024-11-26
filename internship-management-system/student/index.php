@@ -1,18 +1,18 @@
 <?php
 session_start();
-if ($_SESSION["login"] && $_SESSION["kullanici"]["role_ad"] == "öğrenci"){ ?>
+if ($_SESSION["login"] && $_SESSION["kullanici"]["role_ad"] == "student"){ ?>
 
     <!DOCTYPE html>
     <!--
     This is a starter template page. Use this page to start your new project from
     scratch. This page gets rid of all links and provides the needed markup only.
     -->
-    <html lang="tr">
+    <html lang="en">
 
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Öğrenci | ÇÖMÜ STAJ TAKİP</title>
+        <title>Student | ÇÖMÜ Internship Tracking</title>
 
         <!-- Google Font: Source Sans Pro -->
         <link rel="stylesheet"
@@ -57,24 +57,24 @@ if ($_SESSION["login"] && $_SESSION["kullanici"]["role_ad"] == "öğrenci"){ ?>
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Çıkış Yap</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Logout</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        Çıkış yapmak istediğinize emin misiniz ?
+                        Are you sure you want to log out?
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
-                        <a href="../cikis.php" type="button" class="btn btn-danger">Çıkış</a>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <a href="../cikis.php" type="button" class="btn btn-danger">Log Out</a>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Main Sidebar Container -->
-        <?php include "../templates/ogrenci-sidebar.php"?>
+        <?php include "../templates/student-sidebar.php"?>
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
@@ -83,12 +83,12 @@ if ($_SESSION["login"] && $_SESSION["kullanici"]["role_ad"] == "öğrenci"){ ?>
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1 class="m-0">Kayıt Başvurusu Oluştur</h1>
+                            <h1 class="m-0">Create Application Registration</h1>
                         </div><!-- /.col -->
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="#">Anasayfa</a></li>
-                                <li class="breadcrumb-item active">Gösterge Paneli</li>
+                                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                <li class="breadcrumb-item active">Dashboard</li>
                             </ol>
                         </div><!-- /.col -->
                     </div><!-- /.row -->
@@ -101,142 +101,125 @@ if ($_SESSION["login"] && $_SESSION["kullanici"]["role_ad"] == "öğrenci"){ ?>
                 <div class="container-fluid">
                     <?php
                          require "../config.php";
-                        $query = $db->prepare ("SELECT * fROM staj_kayit WHERE ogrenci_id=:id");
-                        $query->execute([
+                        $query = $db->prepare ("SELECT * FROM internship_registration WHERE student_id=:id");
+                        $query->execute([ 
                                 "id" => $_SESSION["kullanici"]["id"],
                         ]);
 
                         $data = $query->fetch();
 
-                        $kayit_sayi = $query->rowCount();
-
-
-
+                        $registration_count = $query->rowCount();
                     ?>
 
-
-                    <?php if ($kayit_sayi): ?>
+                    <?php if ($registration_count): ?>
                         <div class="alert alert-danger" role="alert">
-                            Staj Kayıt işlemi sadece bir kez yapılabilir düzenleme işlemleri için lütfen başvuru durumum sayfasını kullanınız!
+                            Internship registration can only be done once. For editing, please use the application status page!
                         </div>
 
                     <?php else: ?>
-                        <form class="row g-3 w-75" action="../ajax/staj_basvuru_kayit.php" method="post">
+                        <form class="row g-3 w-75" action="../ajax/internship_application_register.php" method="post">
                             <?php
                             require "../config.php";
 
+                            $query = $db->query("SELECT * FROM terms");
+                            $terms = $query->fetchAll();
 
-
-                            $query = $db->query("SELECT * FROM donemler");
-                            $donemler = $query->fetchAll();
-
-                            $query = $db->query("SELECT * FROM sosyal_guvence");
-                            $sosyals = $query->fetchAll();
-                            //print_r($bolumler);
-
-
+                            $query = $db->query("SELECT * FROM social_security");
+                            $socials = $query->fetchAll();
                             ?>
 
                             <input type="hidden" name="id" value="<?= $_SESSION["kullanici"]["id"] ?>">
 
                             <div class="col-md-6 mb-3">
-                                <label for="inputEmail4" class="form-label">Tc Kimlik No</label>
+                                <label for="inputEmail4" class="form-label">National ID Number</label>
                                 <input type="number" name="tc" class="form-control" id="inputEmail4" placeholder="xxxxxxxxxxx">
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="inputPassword4" class="form-label">Telefon Numarası</label>
+                                <label for="inputPassword4" class="form-label">Phone Number</label>
                                 <input type="number" name="tel" class="form-control" id="inputPassword4" placeholder="(5xx)-(xxx)-(xx)-(xx)">
                             </div>
 
-
-
-
                             <div class="col-md-12 mb-3">
-                                <label for="inputPassword4" class="form-label">Öğretim Yılı</label>
-                                <select id="ogr_yıl" class="form-select form-control">
-                                    <option value="err">Öğretim Yılını Seçiniz</option>
-                                    <?php foreach ($donemler as $donem): ?>
-                                        <option value="<?= $donem["id"] ?>"><?= $donem["donem_yil"]?></option>
+                                <label for="inputPassword4" class="form-label">Academic Year</label>
+                                <select id="ogr_yil" class="form-select form-control">
+                                    <option value="err">Select Academic Year</option>
+                                    <?php foreach ($terms as $term): ?>
+                                        <option value="<?= $term["id"] ?>"><?= $term["term_year"]?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
 
                             <div class="col-md-4 mb-3">
-                                <label for="hft_saat" class="form-label">Haftalık Çalışma Gün Sayısı</label>
+                                <label for="hft_saat" class="form-label">Weekly Working Days</label>
                                 <select  id="hft_saat"  class="form-select form-control">
-                                    <option value="err">Lütfen Gün Seçiniz</option>
+                                    <option value="err">Please select days</option>
                                     <option value="5">5</option>
                                     <option value="6">6</option>
                                 </select>
                             </div>
 
                             <div class="col-md-4 mb-3">
-                                <label for="inputPassword4" class="form-label">Staja Başlama Tarihi</label>
-                                <select  id="baslangic" name="staj_tarih" class="form-select form-control">
-                                    <option value="err">Başlangıç Tarihi Seçiniz</option>
+                                <label for="inputPassword4" class="form-label">Internship Start Date</label>
+                                <select  id="baslangic" name="internship_date" class="form-select form-control">
+                                    <option value="err">Select Start Date</option>
                                 </select>
                             </div>
 
                             <div class="col-md-4 mb-3">
-                                <label for="inputPassword4" class="form-label">Staj Bitiş Tarihi</label>
+                                <label for="inputPassword4" class="form-label">Internship End Date</label>
                                 <select disabled id="bitis" class="form-select form-control">
-                                    <option value="err">Bitiş Tarihi</option>
+                                    <option value="err">End Date</option>
                                 </select>
                             </div>
 
                             <div class="col-12 mb-3">
-                                <label for="inputState" class="form-label d-block">Sosyal Güvenceniz</label>
-                                <select id="inputState" name="sigorta" class="form-select form-control">
-                                    <?php foreach ($sosyals as $sosyal): ?>
-                                        <option value="<?= $sosyal["id"] ?>"><?= $sosyal["ad"]?></option>
+                                <label for="inputState" class="form-label d-block">Social Security</label>
+                                <select id="inputState" name="insurance" class="form-select form-control">
+                                    <?php foreach ($socials as $social): ?>
+                                        <option value="<?= $social["id"] ?>"><?= $social["name"]?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
 
                             <div class="col-12">
-                                <label for="inputAddress" class="form-label">İkametgâh Adresi</label>
-                                <textarea class="form-control" name="adres" id="" rows="6" placeholder="İkametgah adresi giriniz..."></textarea>
-                            </div>
-
-
-                            <div class="col-12">
-                                <label for="inputAddress" class="form-label">Kurumun Adı</label>
-                                <input type="text" class="form-control" name="k_ad" placeholder="Kurum adı">
+                                <label for="inputAddress" class="form-label">Residential Address</label>
+                                <textarea class="form-control" name="address" id="" rows="6" placeholder="Enter your residential address..."></textarea>
                             </div>
 
                             <div class="col-12">
-                                <label for="inputAddress" class="form-label">Adresi</label>
-                                <input type="text" class="form-control" name="k_adres" placeholder="Kurumun adresi">
+                                <label for="inputAddress" class="form-label">Institution Name</label>
+                                <input type="text" class="form-control" name="institution_name" placeholder="Institution name">
+                            </div>
+
+                            <div class="col-12">
+                                <label for="inputAddress" class="form-label">Institution Address</label>
+                                <input type="text" class="form-control" name="institution_address" placeholder="Institution address">
                             </div>
                             <div class="col-12">
-                                <label for="inputAddress" class="form-label">Hizmet Alanı</label>
-                                <input type="text" class="form-control" name="k_hizmet_alan" placeholder="Hizmet alanı">
+                                <label for="inputAddress" class="form-label">Service Area</label>
+                                <input type="text" class="form-control" name="service_area" placeholder="Service area">
                             </div>
                             <div class="col-6">
-                                <label for="inputAddress" class="form-label">Telefon No. </label>
-                                <input type="text" class="form-control" name="k_no" placeholder="(5xx)-(xxx)-(xx)-(xx)">
+                                <label for="inputAddress" class="form-label">Phone Number</label>
+                                <input type="text" class="form-control" name="institution_phone" placeholder="(5xx)-(xxx)-(xx)-(xx)">
                             </div>
                             <div class="col-6">
-                                <label for="inputAddress" class="form-label">Faks No. </label>
-                                <input type="text" class="form-control" name="k_faks_no" placeholder="(xxx)-(xxx)-(xx)-(xx)">
+                                <label for="inputAddress" class="form-label">Fax Number</label>
+                                <input type="text" class="form-control" name="institution_fax" placeholder="(xxx)-(xxx)-(xx)-(xx)">
                             </div>
                             <div class="col-6">
-                                <label for="inputAddress" class="form-label">E-posta Adresi</label>
-                                <input type="text" class="form-control" name="k_eposta" placeholder="Kuruma ait E-Posta adresi">
+                                <label for="inputAddress" class="form-label">Email Address</label>
+                                <input type="text" class="form-control" name="institution_email" placeholder="Institution's email address">
                             </div>
 
                             <div class="col-6">
-                                <label for="inputAddress" class="form-label">Web Adresi  </label>
-                                <input type="text" class="form-control" name="k_webadres" placeholder="www.xxxx.com">
+                                <label for="inputAddress" class="form-label">Website Address</label>
+                                <input type="text" class="form-control" name="institution_website" placeholder="www.xxxx.com">
                             </div>
 
                             <div class="col-12 my-4">
-                                <button type="submit" class="btn btn-success">Başvuruyu Tamamla</button>
+                                <button type="submit" class="btn btn-success">Complete Application</button>
                             </div>
-
-
-
-
 
                         </form>
                     <?php endif; ?>
@@ -258,9 +241,8 @@ if ($_SESSION["login"] && $_SESSION["kullanici"]["role_ad"] == "öğrenci"){ ?>
             <!-- To the right -->
 
             <!-- Default to the left -->
-            <strong>Copyright &copy; 2022-2023 <a href="https://www.comu.edu.tr/">Çanakkale 18 Mart Üniversitesi</a>.</strong>
-            Tüm
-            Hakları Saklıdır.
+            <strong>Copyright &copy; 2022-2023 <a href="https://www.comu.edu.tr/">Çanakkale 18 Mart University</a>.</strong>
+            All Rights Reserved.
         </footer>
     </div>
     <!-- ./wrapper -->
@@ -277,14 +259,14 @@ if ($_SESSION["login"] && $_SESSION["kullanici"]["role_ad"] == "öğrenci"){ ?>
     <script>
         $("#hft_saat").change(function () {
             let saat = $(this).val();
-            let yil = $("#ogr_yıl").val();
+            let yil = $("#ogr_yil").val();
             $.ajax({
                 type : 'POST',
                 url : '../ajax/form_data.php',
                 data:{
                     datas:{
-                        hafta_saat:saat,
-                        yil:yil
+                        weekly_hours:saat,
+                        year:yil
                     }
                 },
                 success:function(data) {
@@ -299,7 +281,7 @@ if ($_SESSION["login"] && $_SESSION["kullanici"]["role_ad"] == "öğrenci"){ ?>
                 type : 'POST',
                 url : '../ajax/form_data.php',
                 data:{
-                    staj_tarih_id:id
+                    internship_date_id:id
                 },
                 success:function(data) {
                     $("#bitis").html(data);
