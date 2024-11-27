@@ -1,6 +1,6 @@
 <?php
 session_start();
-if ($_SESSION["login"] && $_SESSION["kullanici"]["role_ad"] == "müdür"){ ?>
+if ($_SESSION["login"] && $_SESSION["user"]["rol_id"] == "manager"){ ?>
 
 <!DOCTYPE html>
 <!--
@@ -124,7 +124,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </div>
             </div>
               <?php
-              $query= $db->prepare("SELECT * FROM kullanicilar WHERE rol_id=:kid");
+              $query= $db->prepare("SELECT * FROM users WHERE rol_id=:kid");
               $query->execute([
                   "kid"=>2
               ]);
@@ -146,7 +146,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </div>
             </div>
               <?php
-              $query= $db->prepare("SELECT * FROM kullanicilar WHERE rol_id=:kid");
+              $query= $db->prepare("SELECT * FROM users WHERE rol_id=:kid");
               $query->execute([
                   "kid"=>3
               ]);
@@ -168,10 +168,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </div>
             </div>
               <br>
-
-
-
-
 
 
 

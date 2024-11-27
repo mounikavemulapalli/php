@@ -2,14 +2,14 @@
 session_start();
 
 // Check if the user is logged in and has the "personel" role
-if (isset($_SESSION["login"]) && $_SESSION["login"] === true && isset($_SESSION["kullanici"]["role_ad"]) && $_SESSION["kullanici"]["role_ad"] === "personel") {
+if (isset($_SESSION["login"]) && $_SESSION["login"] === true && isset($_SESSION["user"]["rol_id"]) && $_SESSION["user"]["rol_id"] === "personel") {
 ?>
 <!DOCTYPE html>
 <html lang="tr">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Danışman | ÇÖMÜ STAJ TAKİP</title>
+  <title>Consultant | Internship Tracking </title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -55,7 +55,7 @@ if (isset($_SESSION["login"]) && $_SESSION["login"] === true && isset($_SESSION[
       <section class="content">
         <div class="container-fluid">
           <!-- Add your content here -->
-          <h1>Hoş Geldiniz, Personel!</h1>
+          <h1>Welcome, Staff!</h1>
         </div>
       </section>
     </div>
@@ -66,17 +66,17 @@ if (isset($_SESSION["login"]) && $_SESSION["login"] === true && isset($_SESSION[
       <div class="modal-dialog" role="document">
           <div class="modal-content">
               <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">Çıkış Yap</h5>
+                  <h5 class="modal-title" id="exampleModalLabel">Log Out</h5>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                       <span aria-hidden="true">&times;</span>
                   </button>
               </div>
               <div class="modal-body">
-                  Çıkış yapmak istediğinize emin misiniz?
+              Are you sure you want to log out?
               </div>
               <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
-                  <a href="../cikis.php" class="btn btn-danger">Çıkış</a>
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                  <a href="../Log Out.php" class="btn btn-danger">Log Out</a>
               </div>
           </div>
       </div>
@@ -87,7 +87,7 @@ if (isset($_SESSION["login"]) && $_SESSION["login"] === true && isset($_SESSION[
       <div class="float-right d-none d-sm-block">
         <b>Version</b> 1.0.0
       </div>
-      <strong>&copy; <?php echo date("Y"); ?> <a href="#">ÇÖMÜ STAJ TAKİP</a>.</strong> Tüm hakları saklıdır.
+      <strong>&copy; <?php echo date("Y"); ?> <a href="#">Internship Tracking</a>.</strong> All rights reserved.
     </footer>
 
   </div>

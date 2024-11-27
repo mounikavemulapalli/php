@@ -14,7 +14,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Yönetici | ÇÖMÜ STAJ TAKİP</title>
+    <title>Administrator  | Internship Tracking</title>
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
@@ -28,9 +28,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" href="../plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="../plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="../plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.2.0/css/datepicker.min.css" rel="stylesheet">
-
-
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -66,13 +63,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Çıkış Yap</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Log Out</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        Çıkış yapmak istediğinize emin misiniz ?
+                    Are you sure you want to log out ?
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
@@ -92,13 +89,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1 class="m-0">Staj Dönemi ve Tarih  İşlemleri</h1>
+                            <h1 class="m-0">Department Operations</h1>
                         </div><!-- /.col -->
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
-                                <button type="button" class="btn btn-info mr-3" data-toggle="modal" data-target="#donem_ekle">
-                                    Dönem Ekle / Çıkar
-                                </button>
                                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ekle_danisman">
                                     Ekle
                                 </button>
@@ -113,45 +107,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Staj Tarihi Ekle</h5>
+                            <h5 class="modal-title" id="exampleModalLabel">new department</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form action="../ajax/staj_tarih_kayit.php" method="post" id="personel_kaydet">
-
-                                  <div class="form-group">
-                                      <label for="inputAddress">Dönem Yılı:</label>
-                                      <?php
-                                        $datalar = $db->query("SELECT * FROM donemler")->fetchAll();
-                                      ?>
-                                      <select id="inputState" name="donem_id" class="form-control">
-                                      <?php foreach ($datalar as $data): ?>
-                                          <option value="<?= $data["id"]; ?>"><?= $data["donem_yil"]; ?></option>
-                                    <?php endforeach; ?>
-                                      </select>
-                                  </div>
-
+                            <form action="../ajax/bolum_kayit.php" method="post" id="personel_kaydet">
+                              
                                 <div class="form-group">
-                                    <label for="inputAddress">Staj Yapılacak Haftalık Gün Sayısı:</label>
-                                    <select id="inputState" name="gun" class="form-control">
-                                        <option value="5">5</option>
-                                        <option value="6">6</option>
-                                    </select>
+                                    <label for="inputAddress">Bölüm Adı:</label>
+                                    <input type="text" name="bolum_ad" class="form-control" id="inputAddress" placeholder="Bölüm adı giriniz">
                                 </div>
-
-
-                                <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="inputEmail4">Staj Giriş Tarihi:</label>
-                                    <input type="date" name="staj_giris" class="form-control" id="inputEmail4">
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="inputPassword4">Staj Bitiş Tarihi:</label>
-                                    <input type="date" name="staj_bitis" class="form-control" id="inputPassword4">
-                                </div>
-                            </div>
                             </form>
                         </div>
                         <div class="modal-footer">
@@ -180,30 +147,23 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                             <thead>
                                                 <tr>
                                                     <th>id</th>
-                                                    <th>Dönem</th>
-                                                    <th>Haftalık Staj Gün Sayısı</th>
-                                                    <th>Staj Giriş Tarihi</th>
-                                                    <th>Staj Bitiş Tarihi</th>
+                                                    <th>Bölüm Adı</th>
                                                     <th>İşlemler</th>
                                                     
                                                 </tr>
                                             </thead>
                                             <tbody>
                                             <?php
-                                            $query=$db->query("SELECT staj_tarih.id,staj_bitis,staj_baslangic,haftalik_gun_sayi,donem_yil FROM staj_tarih INNER JOIN donemler ON staj_tarih.donem_id=donemler.id;
-");
-                                            $staj_tarihler = $query->fetchAll(PDO::FETCH_ASSOC);
+                                            $query=$db->query("SELECT * FROM bolumler");
+                                            $bolumler = $query->fetchAll(PDO::FETCH_ASSOC);
                                             ?>
 
-                                            <?php foreach ($staj_tarihler as $staj_tarih): ?>
+                                            <?php foreach ($bolumler as $bolum): ?>
                                                 <tr>
-                                                    <td><?php echo $staj_tarih["id"]; ?></td>
-                                                    <td><?php echo $staj_tarih["donem_yil"]; ?></td>
-                                                    <td><?php echo $staj_tarih["haftalik_gun_sayi"];?></td>
-                                                    <td><?php echo $staj_tarih["staj_baslangic"];?></td>
-                                                    <td><?php echo $staj_tarih["staj_bitis"];?></td>
+                                                    <td><?php echo $bolum["id"]; ?></td>
+                                                    <td><?php echo $bolum["bolum_ad"];?></td>
                                                     <td>
-                                                        <a class="btn btn-danger" href="<?php echo "../ajax/staj_tarih_sil.php?id=".$staj_tarih["id"]; ?>">Sil</a>
+                                                        <a class="btn btn-danger" href="<?php echo "../ajax/bolum_sil.php?id=".$bolum["id"]; ?>">Sil</a>
                                                     </td>
                                                 </tr>
                                             <?php endforeach; ?>
@@ -225,51 +185,61 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <!-- /.content -->
         </div>
         <!-- /.content-wrapper -->
-        <div class="modal fade" id="donem_ekle" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="duzenle" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Dönem İşlemleri</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Danışman Düzenleme</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form action="../ajax/donem_kayit.php" method="post" id="donem_form">
-
+                        <form action="../ajax/danisman_duzenle.php" method="post" id="danisman_duzenle">
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="inputEmail4">Ad:</label>
+                                    <input type="text" name="ad" class="form-control" id="inputEmail4" placeholder="Ad">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="inputPassword4">Soyad:</label>
+                                    <input type="text" name="soyad" class="form-control" id="inputPassword4" placeholder="Soyad">
+                                </div>
+                            </div>
                             <div class="form-group">
-                                <label for="inputPassword4">Yeni Dönem Ekle:</label>
-                                <input type="text" name="donem_tarih" class="form-control" id="datepicker">
+                                <label for="inputAddress">E-Posta Adresi:</label>
+                                <input type="email" name="email" class="form-control" id="inputAddress" placeholder="xxxxx@comu.edu.com.tr">
+                            </div>
+
+
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="inputCity">Bölüm:</label>
+                                    <select id="inputCity" name="bolum" class="form-control">
+                                        <?php foreach ($bolumler as $bolum): ?>
+                                            <option value="<?php echo $bolum["id"] ?>"><?php echo $bolum["bolum_ad"]; ?></option>
+                                        <?php endforeach;?>
+
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="inputState">Ünvan:</label>
+                                    <select id="inputState" name="unvan" class="form-control">
+
+                                        <?php foreach ($unvanlar as $unvan): ?>
+                                            <option value="<?php echo $unvan["id"]; ?>"><?php echo $unvan["unvan_ad"]; ?></option>
+                                        <?php endforeach;?>
+                                    </select>
+                                </div>
+
                             </div>
 
                         </form>
-
-                        <table class="table table-bordered">
-                            <thead>
-                            <tr>
-                                <th scope="col">Dönem Yılı:</th>
-                                <th scope="col">İşlem:</th>
-
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <?php
-                                $donemler=$db->query("SELECT * FROM donemler");
-                            ?>
-                            <?php foreach ($donemler as $donem): ?>
-                            <tr>
-                                <td><?=  $donem["donem_yil"]; ?></td>
-                                <td>
-                                    <a href="<?php echo "../ajax/donem_sil.php?id=".$donem["id"]; ?>" class="btn btn-danger">Sil</a>
-                                </td>
-                            </tr>
-                            <?php endforeach; ?>
-                            </tbody>
-                        </table>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
-                        <button type="button" id="kaydet_donem" class="btn btn-primary">Kaydet</button>
+                        <button type="button" class="btn btn-primary">Değişiklikleri Kaydet</button>
                     </div>
                 </div>
             </div>
@@ -319,7 +289,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="../plugins/datatables-buttons/js/buttons.html5.min.js"></script>
     <script src="../plugins/datatables-buttons/js/buttons.print.min.js"></script>
     <script src="../plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.2.0/js/bootstrap-datepicker.min.js"></script>
 
     <script>
 
@@ -332,7 +301,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 },
                 columnDefs: [
                     {targets:[0],visible:false},
-                    {targets:[4],searchable:false}
+                    {targets:[2],searchable:false}
                 ],
                 autoWidth: false,
                 buttons: [{
@@ -362,22 +331,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
         $("#kaydet").click(function () {
             $("#personel_kaydet").submit();
-        });
-        $("#kaydet_donem").click(function () {
-            $("#donem_form").submit();
-        });
-
-
-
-        $(document).ready(function(){
-            $("#datepicker").datepicker({
-                format: "yyyy",
-                viewMode: "years",
-                minViewMode: "years",
-                autoclose:true
-            });
         })
-
     </script>
 
 

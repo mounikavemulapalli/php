@@ -1,7 +1,7 @@
 <?php
 session_start();
 require "../config.php";
-if ($_SESSION["login"] && $_SESSION["user"]["rol_id"] == "manager"){ ?>
+if ($_SESSION["login"] && $_SESSION["kullanici"]["role_ad"] == "personel"){ ?>
 
 
     <!DOCTYPE html>
@@ -14,7 +14,7 @@ if ($_SESSION["login"] && $_SESSION["user"]["rol_id"] == "manager"){ ?>
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Yönetici | ÇÖMÜ STAJ TAKİP</title>
+        <title>Personel | ÇÖMÜ STAJ TAKİP</title>
 
         <!-- Google Font: Source Sans Pro -->
         <link rel="stylesheet"
@@ -80,7 +80,7 @@ if ($_SESSION["login"] && $_SESSION["user"]["rol_id"] == "manager"){ ?>
         </div>
 
         <!-- Main Sidebar Container -->
-        <?php include "../templates/yonetim-sidebar.php"?>
+        <?php include "../templates/personel-sidebar.php"?>
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
@@ -89,15 +89,15 @@ if ($_SESSION["login"] && $_SESSION["user"]["rol_id"] == "manager"){ ?>
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1 class="m-0">Staj Onay İşlemi</h1>
+                            <h1 class="m-0">Sigorta Kayıt Listeleme İşlemi</h1>
                         </div><!-- /.col -->
-<!--                        <div class="col-sm-6">-->
-<!--                            <ol class="breadcrumb float-sm-right">-->
-<!--                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ekle_danisman">-->
-<!--                                    Ekle-->
-<!--                                </button>-->
-<!--                            </ol>-->
-<!--                        </div>/.col -->
+                        <!--                        <div class="col-sm-6">-->
+                        <!--                            <ol class="breadcrumb float-sm-right">-->
+                        <!--                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ekle_danisman">-->
+                        <!--                                    Ekle-->
+                        <!--                                </button>-->
+                        <!--                            </ol>-->
+                        <!--                        </div>/.col -->
                     </div><!-- /.row -->
                 </div><!-- /.container-fluid -->
             </div>
@@ -116,6 +116,7 @@ if ($_SESSION["login"] && $_SESSION["user"]["rol_id"] == "manager"){ ?>
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-12">
+
                                         <table id="example1"
                                                class="table table-bordered table-striped dataTable dtr-inline"
                                                aria-describedby="example1_info">
@@ -123,36 +124,65 @@ if ($_SESSION["login"] && $_SESSION["user"]["rol_id"] == "manager"){ ?>
                                             <tr>
                                                 <th>id</th>
                                                 <th>Ad Soyad</th>
-                                                <th>Öğrenci No</th>
-                                                <th>Öğrenci E-Posta</th>
-                                                <th>Telefon No</th>
-                                                <th>İşlemler</th>
+                                                <th>Tc</th>
+                                                <th>Ögrenci No</th>
+                                                <th>Tel</th>
+                                                <th>Sigorta Giriş İşlemi</th>
+                                                <th>Sigorta Çıkış İşlemi</th>
+                                                <th>Staj Başlangıç Tarihi</th>
+                                                <th>Staj Bitiş Tarihi</th>
                                             </tr>
                                             </thead>
                                             <tbody>
                                             <?php
 
 
-                                            $query=$db->query("SELECT staj_kayit.id as kayit_id,ad,soyad,ogrenci_no,tel,email,kullanicilar.id as k_id  FROM staj_kayit
+                                            $query=$db->query("SELECT staj_kayit.id as kayit_id,CONCAT(ad,\" \",soyad) as tam_ad,tc,ogrenci_no,tel,sigorta_giris_onay,sigorta_cikis_onay,
+DATE_FORMAT(staj_baslangic,\"%d-%m-%Y\") as staj_baslangic ,DATE_FORMAT(staj_bitis,\"%d-%m-%Y\") as staj_bitis FROM `staj_kayit`
+INNER JOIN staj_tarih ON staj_kayit.staj_tarih_id=staj_tarih.id
 INNER JOIN ogrenci_detay ON staj_kayit.ogrenci_id=ogrenci_detay.ogrenci_id
-INNER JOIN kullanicilar ON staj_kayit.ogrenci_id=kullanicilar.id
-WHERE staj_kayit.mudur_onay=0 AND staj_kayit.danisman_onay=1");
+INNER JOIN kullanicilar ON kullanicilar.id = staj_kayit.ogrenci_id
+
+");
 
                                             $personeller = $query->fetchAll(PDO::FETCH_ASSOC);
-                                            //print_r($personeller);
+
                                             ?>
 
                                             <?php foreach ($personeller as $personel): ?>
                                                 <tr>
                                                     <td><?php echo $personel["kayit_id"]; ?></td>
-                                                    <td><?php echo $personel["ad"]." ".$personel["soyad"]; ?></td>
+                                                    <td><?php echo $personel["tam_ad"]?></td>
+                                                    <td><?php echo $personel["tc"] ?></td>
                                                     <td><?php echo $personel["ogrenci_no"] ?></td>
-                                                    <td><?php echo $personel["email"] ?></td>
-                                                    <td><?php echo $personel["tel"]; ?></td>
+                                                    <td><?php echo $personel["tel"] ?></td>
                                                     <td>
-                                                        <a class="btn btn-info" href="<?php echo "../ogrenci/pdf/index.php?id=".$personel["k_id"]; ?>">Detayları Göster</a>
-                                                        <a class="btn btn-success" href="<?php echo "../ajax/staj_onay.php?mudur_onay_id=".$personel["kayit_id"]; ?>">Onayla</a>
+                                                        <?php if ($personel["sigorta_giris_onay"]==1) { ?>
+                                                            <div class="alert-success p-2" role="alert">
+                                                                Tamamlandı
+                                                            </div>
+                                                        <?php } else { ?>
+                                                            <div class="alert-warning p-2 text-white" role="alert">
+                                                                Bekleniyor
+                                                            </div>
+                                                        <?php } ?>
+
                                                     </td>
+                                                    <td>
+                                                        <?php if ($personel["sigorta_cikis_onay"]==1) { ?>
+                                                            <div class="alert-success p-2" role="alert">
+                                                                Tamamlandı
+                                                            </div>
+                                                        <?php } else { ?>
+                                                            <div class="alert-warning p-2 text-white" role="alert">
+                                                                Bekleniyor
+                                                            </div>
+                                                        <?php } ?>
+
+                                                    </td>
+                                                    <td><?php echo $personel["staj_baslangic"]; ?></td>
+                                                    <td><?php echo $personel["staj_bitis"]; ?></td>
+
                                                 </tr>
                                             <?php endforeach; ?>
 
@@ -278,49 +308,147 @@ WHERE staj_kayit.mudur_onay=0 AND staj_kayit.danisman_onay=1");
     <script src="../plugins/datatables-buttons/js/buttons.print.min.js"></script>
     <script src="../plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 
+    <script src="https://cdn.datatables.net/fixedheader/3.2.3/js/dataTables.fixedHeader.min.js"></script>
+
     <script>
 
 
+
         $(document).ready(function () {
+
+            $('#example1 thead tr')
+                .clone(true)
+                .addClass('filters')
+                .appendTo('#example1 thead');
+
+
             var table = $('#example1').DataTable({
                 responsive: true,
-                lengthChange: true,
+                lengthChange: false,
+                fixedHeader: true,
+                orderCellsTop: true,
                 language: {
                     "url": "//cdn.datatables.net/plug-ins/1.11.5/i18n/tr.json"
                 },
                 columnDefs: [
                     {targets:[0],visible:false},
-                    {targets:[3],searchable:false}
+                    // {targets:[5],visible:false},
+                    // {targets:[6],visible:false},
+                    // {targets:[3],visible:false},
+                    // {targets:[4],visible:false}
                 ],
                 autoWidth: false,
+                buttons: [{
+                    extend: 'excel',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },   {
+                    extend: 'pdf',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },  {
+                    extend: 'print',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                }, "colvis",{
+                    extend: 'collection',
+                    text: 'Filtrele',
+                    buttons: [
+                        {
+                            text: 'Tümü',
+                            action: function ( e, dt, node, config ) {
+                                location.reload();
+                            }
+                        },
+                        {
+                            text: 'Sigorta Girişi Tamamlananlar',
+                            action: function ( e, dt, node, config ) {
+                                table.columns(5).search( "Tamamlandı" ).draw();
+                            }
+                        },
+                        {
+                            text: 'Sigorta Girişi Bekleyenler',
+                            action: function ( e, dt, node, config ) {
+                                table.columns(5).search( "Bekleniyor" ).draw();
+                            }
+                        },
+                        {
+                            text: 'Sigorta Çıkışı Tamamlananlar',
+                            action: function ( e, dt, node, config ) {
+                                table.columns(6).search( "Tamamlandı" ).draw();
+                            }
+                        },{
+                            text: 'Sigorta Çıkışı Bekleyenler',
+                            action: function ( e, dt, node, config ) {
+                                table.columns(6).search( "Bekleniyor" ).draw();
+                            }
+                        },
+                    ],
+                    dropup: true,
+
+                }],
+
+
 
 
                 initComplete: function () {
                     setTimeout(function () {
-                        //table.buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+                        table.buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
                     }, 10);
+
+                    var api = this.api();
+
+                    api
+                        .columns()
+                        .eq(0)
+                        .each(function (colIdx) {
+                            // Set the header cell to contain the input element
+                            var cell = $('.filters th').eq(
+                                $(api.column(colIdx).header()).index()
+                            );
+                            var title = $(cell).text();
+                            $(cell).html('<input type="text" placeholder="' + title + '" />');
+
+                            // On every keypress in this input
+                            $(
+                                'input',
+                                $('.filters th').eq($(api.column(colIdx).header()).index())
+                            )
+                                .off('keyup change')
+                                .on('keyup change', function (e) {
+                                    e.stopPropagation();
+
+                                    // Get the search value
+                                    $(this).attr('title', $(this).val());
+                                    var regexr = '({search})'; //$(this).parents('th').find('select').val();
+
+                                    var cursorPosition = this.selectionStart;
+                                    // Search the column for that value
+                                    api
+                                        .column(colIdx)
+                                        .search(
+                                            this.value != ''
+                                                ? regexr.replace('{search}', '(((' + this.value + ')))')
+                                                : '',
+                                            this.value != '',
+                                            this.value == ''
+                                        )
+                                        .draw();
+
+                                    $(this)
+                                        .focus()[0]
+                                        .setSelectionRange(cursorPosition, cursorPosition);
+                                });
+                        });
                 }
             });
-        });
 
-        $("#kaydet").click(function () {
-            $("#personel_kaydet").submit();
 
         });
-        $("#bolum").change(function () {
-            let bolum_id = $(this).val();
-            $.ajax({
-                type : 'POST',
-                url : '../ajax/form_data.php',
-                data:{
-                    bolum_id:bolum_id
-                },
-                success:function(data) {
-                    $("#danisman").html(data);
-                    console.log(data);
-                }
-            })
-        });
+
     </script>
 
 

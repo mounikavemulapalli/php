@@ -1,7 +1,7 @@
 <?php
 session_start();
 require "../config.php";
-if ($_SESSION["login"] && $_SESSION["kullanici"]["role_ad"] == "müdür"){ ?>
+if ($_SESSION["login"] && $_SESSION["user"]["rol_id"] == "manager"){ ?>
 
 
     <!DOCTYPE html>

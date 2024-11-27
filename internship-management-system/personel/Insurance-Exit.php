@@ -1,7 +1,7 @@
 <?php
 session_start();
 require "../config.php";
-if ($_SESSION["login"] && $_SESSION["user"]["rol_id"] == "manager"){ ?>
+if ($_SESSION["login"] && $_SESSION["kullanici"]["role_ad"] == "personel"){ ?>
 
 
     <!DOCTYPE html>
@@ -14,7 +14,7 @@ if ($_SESSION["login"] && $_SESSION["user"]["rol_id"] == "manager"){ ?>
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Yönetici | ÇÖMÜ STAJ TAKİP</title>
+        <title>Personel | ÇÖMÜ STAJ TAKİP</title>
 
         <!-- Google Font: Source Sans Pro -->
         <link rel="stylesheet"
@@ -80,7 +80,7 @@ if ($_SESSION["login"] && $_SESSION["user"]["rol_id"] == "manager"){ ?>
         </div>
 
         <!-- Main Sidebar Container -->
-        <?php include "../templates/yonetim-sidebar.php"?>
+        <?php include "../templates/personel-sidebar.php"?>
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
@@ -89,7 +89,7 @@ if ($_SESSION["login"] && $_SESSION["user"]["rol_id"] == "manager"){ ?>
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1 class="m-0">Staj Onay İşlemi</h1>
+                            <h1 class="m-0">Sigorta Çıkış İşlemi</h1>
                         </div><!-- /.col -->
 <!--                        <div class="col-sm-6">-->
 <!--                            <ol class="breadcrumb float-sm-right">-->
@@ -124,7 +124,7 @@ if ($_SESSION["login"] && $_SESSION["user"]["rol_id"] == "manager"){ ?>
                                                 <th>id</th>
                                                 <th>Ad Soyad</th>
                                                 <th>Öğrenci No</th>
-                                                <th>Öğrenci E-Posta</th>
+                                                <th>T.C Kimlik</th>
                                                 <th>Telefon No</th>
                                                 <th>İşlemler</th>
                                             </tr>
@@ -133,13 +133,14 @@ if ($_SESSION["login"] && $_SESSION["user"]["rol_id"] == "manager"){ ?>
                                             <?php
 
 
-                                            $query=$db->query("SELECT staj_kayit.id as kayit_id,ad,soyad,ogrenci_no,tel,email,kullanicilar.id as k_id  FROM staj_kayit
-INNER JOIN ogrenci_detay ON staj_kayit.ogrenci_id=ogrenci_detay.ogrenci_id
+                                            $query=$db->query("SELECT ad,soyad,email,tel,ogrenci_no,tc,staj_kayit.id as kayit_id FROM staj_kayit
+INNER JOIN staj_tarih ON staj_kayit.staj_tarih_id=staj_tarih.id
 INNER JOIN kullanicilar ON staj_kayit.ogrenci_id=kullanicilar.id
-WHERE staj_kayit.mudur_onay=0 AND staj_kayit.danisman_onay=1");
+INNER JOIN ogrenci_detay ON staj_kayit.ogrenci_id=ogrenci_detay.ogrenci_id
+WHERE NOW() BETWEEN DATE_ADD(staj_bitis, INTERVAL -7 DAY) AND staj_bitis AND sigorta_giris_onay=1");
 
                                             $personeller = $query->fetchAll(PDO::FETCH_ASSOC);
-                                            //print_r($personeller);
+
                                             ?>
 
                                             <?php foreach ($personeller as $personel): ?>
@@ -147,11 +148,10 @@ WHERE staj_kayit.mudur_onay=0 AND staj_kayit.danisman_onay=1");
                                                     <td><?php echo $personel["kayit_id"]; ?></td>
                                                     <td><?php echo $personel["ad"]." ".$personel["soyad"]; ?></td>
                                                     <td><?php echo $personel["ogrenci_no"] ?></td>
-                                                    <td><?php echo $personel["email"] ?></td>
+                                                    <td><?php echo $personel["tc"] ?></td>
                                                     <td><?php echo $personel["tel"]; ?></td>
                                                     <td>
-                                                        <a class="btn btn-info" href="<?php echo "../ogrenci/pdf/index.php?id=".$personel["k_id"]; ?>">Detayları Göster</a>
-                                                        <a class="btn btn-success" href="<?php echo "../ajax/staj_onay.php?mudur_onay_id=".$personel["kayit_id"]; ?>">Onayla</a>
+                                                        <a class="btn btn-success" href="<?php echo "../ajax/sigorta_onay.php?sigorta_giris=".$personel["kayit_id"]; ?>">Onayla</a>
                                                     </td>
                                                 </tr>
                                             <?php endforeach; ?>
