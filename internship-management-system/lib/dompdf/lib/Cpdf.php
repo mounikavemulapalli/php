@@ -600,7 +600,7 @@ class Cpdf
     }
 
     /**
-     * define the document catalog, the overall controller for the document
+     * define the document catalog, the overall controles for the document
      *
      * @param $id
      * @param $action

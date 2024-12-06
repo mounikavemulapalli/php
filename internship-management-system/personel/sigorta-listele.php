@@ -1,7 +1,7 @@
 <?php
 session_start();
 require "../config.php";
-if ($_SESSION["login"] && $_SESSION["kullanici"]["role_ad"] == "personel"){ ?>
+if ($_SESSION["login"] && $_SESSION["users"]["role_ad"] == "personel"){ ?>
 
 
     <!DOCTYPE html>
@@ -63,17 +63,17 @@ if ($_SESSION["login"] && $_SESSION["kullanici"]["role_ad"] == "personel"){ ?>
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Çıkış Yap</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Log out</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        Çıkış yapmak istediğinize emin misiniz ?
+                    Are you sure you want to log out ?
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
-                        <a href="../cikis.php" type="button" class="btn btn-danger">Çıkış</a>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">cancel</button>
+                        <a href="../cikis.php" type="button" class="btn btn-danger">exit</a>
                     </div>
                 </div>
             </div>
@@ -89,7 +89,7 @@ if ($_SESSION["login"] && $_SESSION["kullanici"]["role_ad"] == "personel"){ ?>
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1 class="m-0">Sigorta Kayıt Listeleme İşlemi</h1>
+                            <h1 class="m-0">Insurance Record Listing Process</h1>
                         </div><!-- /.col -->
                         <!--                        <div class="col-sm-6">-->
                         <!--                            <ol class="breadcrumb float-sm-right">-->
@@ -123,7 +123,7 @@ if ($_SESSION["login"] && $_SESSION["kullanici"]["role_ad"] == "personel"){ ?>
                                             <thead>
                                             <tr>
                                                 <th>id</th>
-                                                <th>Ad Soyad</th>
+                                                <th>Full Name</th>
                                                 <th>Tc</th>
                                                 <th>Ögrenci No</th>
                                                 <th>Tel</th>
@@ -137,19 +137,19 @@ if ($_SESSION["login"] && $_SESSION["kullanici"]["role_ad"] == "personel"){ ?>
                                             <?php
 
 
-                                            $query=$db->query("SELECT staj_kayit.id as kayit_id,CONCAT(ad,\" \",soyad) as tam_ad,tc,ogrenci_no,tel,sigorta_giris_onay,sigorta_cikis_onay,
-DATE_FORMAT(staj_baslangic,\"%d-%m-%Y\") as staj_baslangic ,DATE_FORMAT(staj_bitis,\"%d-%m-%Y\") as staj_bitis FROM `staj_kayit`
-INNER JOIN staj_tarih ON staj_kayit.staj_tarih_id=staj_tarih.id
-INNER JOIN ogrenci_detay ON staj_kayit.ogrenci_id=ogrenci_detay.ogrenci_id
-INNER JOIN kullanicilar ON kullanicilar.id = staj_kayit.ogrenci_id
+                                            $query=$db->query("SELECT internship_registration.id as kayit_id,CONCAT(ad,\" \",soyad) as tam_ad,tc,ogrenci_no,tel,sigorta_giris_onay,sigorta_cikis_onay,
+DATE_FORMAT(staj_baslangic,\"%d-%m-%Y\") as staj_baslangic ,DATE_FORMAT(staj_bitis,\"%d-%m-%Y\") as staj_bitis FROM `internship_registration`
+INNER JOIN Internship_date ON internship_registration.Internship_date_id=Internship_date.id
+INNER JOIN student_details ON internship_registration.ogrenci_id=student_details.ogrenci_id
+INNER JOIN users ON users.id = internship_registration.ogrenci_id
 
 ");
 
-                                            $personeller = $query->fetchAll(PDO::FETCH_ASSOC);
+                                            $Staff = $query->fetchAll(PDO::FETCH_ASSOC);
 
                                             ?>
 
-                                            <?php foreach ($personeller as $personel): ?>
+                                            <?php foreach ($Staff as $personel): ?>
                                                 <tr>
                                                     <td><?php echo $personel["kayit_id"]; ?></td>
                                                     <td><?php echo $personel["tam_ad"]?></td>
@@ -233,9 +233,9 @@ INNER JOIN kullanicilar ON kullanicilar.id = staj_kayit.ogrenci_id
 
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <label for="inputCity">Bölüm:</label>
+                                    <label for="inputCity">Section:</label>
                                     <select id="inputCity" name="bolum" class="form-control">
-                                        <?php foreach ($bolumler as $bolum): ?>
+                                        <?php foreach ($department as $bolum): ?>
                                             <option value="<?php echo $bolum["id"] ?>"><?php echo $bolum["bolum_ad"]; ?></option>
                                         <?php endforeach;?>
 
@@ -245,7 +245,7 @@ INNER JOIN kullanicilar ON kullanicilar.id = staj_kayit.ogrenci_id
                                     <label for="inputState">Ünvan:</label>
                                     <select id="inputState" name="unvan" class="form-control">
 
-                                        <?php foreach ($unvanlar as $unvan): ?>
+                                        <?php foreach ($titles as $unvan): ?>
                                             <option value="<?php echo $unvan["id"]; ?>"><?php echo $unvan["unvan_ad"]; ?></option>
                                         <?php endforeach;?>
                                     </select>
@@ -355,7 +355,7 @@ INNER JOIN kullanicilar ON kullanicilar.id = staj_kayit.ogrenci_id
                     }
                 }, "colvis",{
                     extend: 'collection',
-                    text: 'Filtrele',
+                    text: 'Filter',
                     buttons: [
                         {
                             text: 'Tümü',

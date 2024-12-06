@@ -1,7 +1,7 @@
 <?php
 session_start();
 require "../config.php";
-if ($_SESSION["login"] && $_SESSION["user"]["rol_id"] == "manager"){ ?>
+if ($_SESSION["login"] && $_SESSION["users"]["role_ad"] == "manager"){ ?>
 
 
 <!DOCTYPE html>
@@ -94,7 +94,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
                                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ekle_danisman">
-                                    Ekle
+                                    Add
                                 </button>
                             </ol>
                         </div><!-- /.col -->
@@ -125,7 +125,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="inputAddress">E-Posta Adresi:</label>
+                                    <label for="inputAddress">E-mail Address:</label>
                                     <input type="email" name="email" class="form-control" id="inputAddress" placeholder="xxxxx@comu.edu.com.tr">
                                 </div>
                             </form>
@@ -156,24 +156,24 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                             <thead>
                                                 <tr>
                                                     <th>id</th>
-                                                    <th>Ad Soyad</th>
-                                                    <th>E-Posta</th>
-                                                    <th>İşlemler</th>
+                                                    <th>Full Name</th>
+                                                    <th>E-Mail</th>
+                                                    <th>Transactions</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                             <?php
-                                            $query=$db->query("SELECT kullanicilar.id,ad,soyad,email FROM kullanicilar INNER JOIN roller ON roller.id=kullanicilar.rol_id  WHERE kullanicilar.rol_id=3");
-                                            $personeller = $query->fetchAll(PDO::FETCH_ASSOC);
+                                            $query=$db->query("SELECT users.id,ad,soyad,email FROM users INNER JOIN roles ON roles.id=users.rol_id  WHERE users.rol_id=3");
+                                            $Staff = $query->fetchAll(PDO::FETCH_ASSOC);
                                             ?>
 
-                                            <?php foreach ($personeller as $personel): ?>
+                                            <?php foreach ($Staff as $personel): ?>
                                                 <tr>
                                                     <td><?php echo $personel["id"]; ?></td>
                                                     <td><?php echo $personel["ad"]." ".$personel["soyad"]; ?></td>
                                                     <td><?php echo $personel["email"]; ?></td>
                                                     <td>
-                                                        <a class="btn btn-danger" href="<?php echo "../ajax/personel_sil.php?id=".$personel["id"]; ?>">Sil</a>
+                                                        <a class="btn btn-danger" href="<?php echo "../ajax/personel_sil.php?id=".$personel["id"]; ?>">Delete</a>
                                                     </td>
                                                 </tr>
                                             <?php endforeach; ?>
@@ -199,7 +199,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Danışman Düzenleme</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Consultant Editing</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -217,7 +217,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="inputAddress">E-Posta Adresi:</label>
+                                <label for="inputAddress">E-mail Address:</label>
                                 <input type="email" name="email" class="form-control" id="inputAddress" placeholder="xxxxx@comu.edu.com.tr">
                             </div>
 
@@ -225,9 +225,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <label for="inputCity">Bölüm:</label>
+                                    <label for="inputCity">Section:</label>
                                     <select id="inputCity" name="bolum" class="form-control">
-                                        <?php foreach ($bolumler as $bolum): ?>
+                                        <?php foreach ($department as $bolum): ?>
                                             <option value="<?php echo $bolum["id"] ?>"><?php echo $bolum["bolum_ad"]; ?></option>
                                         <?php endforeach;?>
 
@@ -237,7 +237,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     <label for="inputState">Ünvan:</label>
                                     <select id="inputState" name="unvan" class="form-control">
 
-                                        <?php foreach ($unvanlar as $unvan): ?>
+                                        <?php foreach ($titles as $unvan): ?>
                                             <option value="<?php echo $unvan["id"]; ?>"><?php echo $unvan["unvan_ad"]; ?></option>
                                         <?php endforeach;?>
                                     </select>

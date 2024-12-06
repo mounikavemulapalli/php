@@ -11,7 +11,7 @@ if(isset($_POST["gun"])){
     $staj_giris = $_POST["staj_giris"];
     $staj_bitis = $_POST["staj_bitis"];
 
-    $query= $db->prepare("INSERT INTO staj_tarih (donem_id,haftalik_gun_sayi,staj_baslangic,staj_bitis) VALUES (:tdonem_id,:tgun,:tgiris,:tcikis)");
+    $query= $db->prepare("INSERT INTO Internship_date (donem_id,haftalik_gun_sayi,staj_baslangic,staj_bitis) VALUES (:tdonem_id,:tgun,:tgiris,:tcikis)");
     $kaydet=$query->execute([
         "tdonem_id" => $donem_id,
         "tgun" => $gun,
@@ -19,7 +19,7 @@ if(isset($_POST["gun"])){
         "tcikis" => $staj_bitis,
     ]);
 
-    header("Location:../yönetim/staj-tarih-islem.php");
+    header("Location:../Management/staj-tarih-islem.php");
 
 
 }

@@ -1,6 +1,6 @@
 <?php
 session_start();
-if ($_SESSION["login"] && $_SESSION["user"]["rol_id"] == "manager"){ ?>
+if ($_SESSION["login"] && $_SESSION["users"]["role_ad"] == "manager"){ ?>
 
 <!DOCTYPE html>
 <!--
@@ -83,12 +83,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
-              <h1 class="m-0">Gösterge Paneli</h1>
+              <h1 class="m-0">Dashboard</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="#">Anasayfa</a></li>
-                <li class="breadcrumb-item active">Gösterge Paneli</li>
+                <li class="breadcrumb-item"><a href="#">Home Page</a></li>
+                <li class="breadcrumb-item active">Dashboard</li>
               </ol>
             </div><!-- /.col -->
           </div><!-- /.row -->
@@ -104,7 +104,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <div class="col-lg-3 col-6">
                 <?php
                     require "../config.php";
-                    $query= $db->prepare("SELECT * FROM kullanicilar WHERE rol_id=:kid");
+                    $query= $db->prepare("SELECT * FROM users WHERE rol_id=:kid");
                     $query->execute([
                             "kid"=>4
                     ]);
@@ -113,13 +113,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <div class="small-box bg-info">
                 <div class="inner">
                   <h3><?php echo $ogrenci_sayi ?></h3>
-                  <p>Kayıtlı Öğrenciler</p>
+                  <p>Registered Students </p>
                 </div>
                 <div class="icon">
                   <i class="fa-solid fa-user-graduate"></i>
                 </div>
                 <a href="#" class="small-box-footer">
-                  Detaylı Bilgi <i class="fas fa-arrow-circle-right"></i>
+                  Detailed Information <i class="fas fa-arrow-circle-right"></i>
                 </a>
               </div>
             </div>
@@ -135,13 +135,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <div class="small-box bg-info">
                 <div class="inner">
                   <h3><?php echo $danisman_sayi ?></h3>
-                  <p>Danışmanlar</p>
+                  <p>consultants</p>
                 </div>
                 <div class="icon">
                   <i class="fa-solid fa-building-columns"></i>
                 </div>
                 <a href="#" class="small-box-footer">
-                  Detaylı Bilgi <i class="fas fa-arrow-circle-right"></i>
+                  Detailed Information <i class="fas fa-arrow-circle-right"></i>
                 </a>
               </div>
             </div>
@@ -157,17 +157,21 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <div class="small-box bg-info">
                 <div class="inner">
                   <h3><?php echo $personel_sayi ?></h3>
-                  <p>Personeller</p>
+                  <p>Staff</p>
                 </div>
                 <div class="icon">
                   <i class="fa-solid fa-user-tie"></i>
                 </div>
                 <a href="#" class="small-box-footer">
-                  Detaylı Bilgi <i class="fas fa-arrow-circle-right"></i>
+                  Detailed Information <i class="fas fa-arrow-circle-right"></i>
                 </a>
               </div>
             </div>
               <br>
+
+
+
+
 
 
 
@@ -179,31 +183,31 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <div class="col-lg-3 col-6">
                     <?php
                     require "../config.php";
-                    $query= $db->query("SELECT staj_kayit.id as kayit_id,ad,soyad,ogrenci_no,tel FROM staj_kayit
-INNER JOIN ogrenci_detay ON staj_kayit.ogrenci_id=ogrenci_detay.ogrenci_id
-INNER JOIN kullanicilar ON staj_kayit.ogrenci_id=kullanicilar.id
-WHERE  staj_kayit.mudur_onay=0 AND staj_kayit.danisman_onay=1");
+                    $query= $db->query("SELECT internship_registration.id as kayit_id,ad,soyad,ogrenci_no,tel FROM internship_registration
+INNER JOIN student_details ON internship_registration.ogrenci_id=student_details.ogrenci_id
+INNER JOIN users ON internship_registration.ogrenci_id=users.id
+WHERE  internship_registration.mudur_onay=0 AND internship_registration.danisman_onay=1");
 
                     $ogrenci_sayi = $query->rowCount();
                     ?>
                     <div class="small-box bg-warning">
                         <div class="inner">
                             <h3 class="text-white"><?php echo $ogrenci_sayi  ?></h3>
-                            <p class="text-white">Onay Bekleyen Stajlar</p>
+                            <p class="text-white">Internships Awaiting Approval</p>
                         </div>
                         <div class="icon">
                             <i class="fa-solid fa-calendar-check"></i>
                         </div>
                         <a href="#" class="small-box-footer" style="color: white!important;">
-                            Detaylı Bilgi <i class="fas fa-arrow-circle-right text-white"></i>
+                            Detailed Information <i class="fas fa-arrow-circle-right text-white"></i>
                         </a>
                     </div>
                 </div>
                 <?php
-                $query= $db->query("SELECT staj_kayit.id as kayit_id,ad,soyad,ogrenci_no,tel FROM staj_kayit
-INNER JOIN ogrenci_detay ON staj_kayit.ogrenci_id=ogrenci_detay.ogrenci_id
-INNER JOIN kullanicilar ON staj_kayit.ogrenci_id=kullanicilar.id
-WHERE staj_kayit.mudur_onay=1");
+                $query= $db->query("SELECT internship_registration.id as kayit_id,ad,soyad,ogrenci_no,tel FROM internship_registration
+INNER JOIN student_details ON internship_registration.ogrenci_id=student_details.ogrenci_id
+INNER JOIN users ON internship_registration.ogrenci_id=users.id
+WHERE internship_registration.mudur_onay=1");
 
                 $danisman_sayi = $query->rowCount();
                 ?>
@@ -211,13 +215,13 @@ WHERE staj_kayit.mudur_onay=1");
                     <div class="small-box bg-success">
                         <div class="inner">
                             <h3><?php echo $danisman_sayi ?></h3>
-                            <p>Onaylanmış Toplam Stajlar</p>
+                            <p>Total Approved Internships </p>
                         </div>
                         <div class="icon">
                             <i class="fa-solid fa-circle-check"></i>
                         </div>
                         <a href="#" class="small-box-footer">
-                            Detaylı Bilgi <i class="fas fa-arrow-circle-right"></i>
+                            Detailed Information <i class="fas fa-arrow-circle-right"></i>
                         </a>
                     </div>
                 </div>
@@ -239,9 +243,8 @@ WHERE staj_kayit.mudur_onay=1");
       <!-- To the right -->
 
       <!-- Default to the left -->
-      <strong>Copyright &copy; 2022-2023 <a href="https://www.comu.edu.tr/">Çanakkale 18 Mart Üniversitesi</a>.</strong>
-      Tüm
-      Hakları Saklıdır.
+      <strong>Copyright &copy; 2022-2023 <a href="https://www.comu.edu.tr/">TEN Network</a>.</strong>
+     All Rights Reserved
     </footer>
   </div>
   <!-- ./wrapper -->

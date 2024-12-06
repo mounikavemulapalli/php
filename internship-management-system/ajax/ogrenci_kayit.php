@@ -28,7 +28,7 @@ if (isset($_POST)){
 
     $rol_id=4;
 
-    $query=$db->prepare("INSERT INTO kullanicilar  (ad,soyad,email,sifreHash,rol_id) VALUES (:value1,:value2,:value3,:value4,:value5)");
+    $query=$db->prepare("INSERT INTO users  (ad,soyad,email,sifreHash,rol_id) VALUES (:value1,:value2,:value3,:value4,:value5)");
     $kaydet=$query->execute([
         "value1" => $ad,
         "value2" => $soyad,
@@ -41,7 +41,7 @@ if (isset($_POST)){
     if ($kaydet){
         $id = $db->lastInsertId();
 
-        $query=$db->prepare("INSERT INTO ogrenci_detay (ogrenci_id,ogrenci_no,danisman_id_fk,bolum_id_fk) VALUES (:value1,:value2,:value3,:value4)");
+        $query=$db->prepare("INSERT INTO student_details (ogrenci_id,ogrenci_no,danisman_id_fk,bolum_id_fk) VALUES (:value1,:value2,:value3,:value4)");
         $query->execute([
             "value1"=>$id,
             "value2"=>$no,
@@ -83,7 +83,7 @@ if (isset($_POST)){
         $mail->send();
 
 
-        header("Location:../yönetim/ogrenci-islem.php");
+        header("Location:../Management/ogrenci-islem.php");
 
     } catch (Exception $e) {
         echo "E-Posta Hata Mesajı: {$mail->ErrorInfo}";

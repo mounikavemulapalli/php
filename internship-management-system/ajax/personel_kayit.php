@@ -21,7 +21,7 @@ if (isset($_POST)){
     $sifre=md5($pwd);
     $rol_id=3;
 
-    $query=$db->prepare("INSERT INTO kullanicilar  (ad,soyad,email,sifreHash,rol_id) VALUES (:value1,:value2,:value3,:value4,:value5)");
+    $query=$db->prepare("INSERT INTO users  (ad,soyad,email,sifreHash,rol_id) VALUES (:value1,:value2,:value3,:value4,:value5)");
     $kaydet=$query->execute([
         "value1" => $ad,
         "value2" => $soyad,
@@ -63,7 +63,7 @@ if (isset($_POST)){
         $mail->send();
 
 
-        header("Location:../yönetim/personel-islem.php");
+        header("Location:../Management/personel-islem.php");
 
     } catch (Exception $e) {
         echo "E-Posta Hata Mesajı: {$mail->ErrorInfo}";

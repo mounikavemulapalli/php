@@ -1,7 +1,7 @@
 <?php
 session_start();
 require "../config.php";
-if ($_SESSION["login"] && $_SESSION["kullanici"]["role_ad"] == "personel"){ ?>
+if ($_SESSION["login"] && $_SESSION["users"]["role_ad"] == "personel"){ ?>
 
 
     <!DOCTYPE html>
@@ -122,28 +122,28 @@ if ($_SESSION["login"] && $_SESSION["kullanici"]["role_ad"] == "personel"){ ?>
                                             <thead>
                                             <tr>
                                                 <th>id</th>
-                                                <th>Ad Soyad</th>
-                                                <th>Öğrenci No</th>
+                                                <th>Full Name</th>
+                                                <th>Student Number</th>
                                                 <th>T.C Kimlik</th>
-                                                <th>Telefon No</th>
-                                                <th>İşlemler</th>
+                                                <th>Telephone Number</th>
+                                                <th>Transactions</th>
                                             </tr>
                                             </thead>
                                             <tbody>
                                             <?php
 
 
-                                            $query=$db->query("SELECT ad,soyad,email,tel,ogrenci_no,tc,staj_kayit.id as kayit_id FROM staj_kayit
-INNER JOIN staj_tarih ON staj_kayit.staj_tarih_id=staj_tarih.id
-INNER JOIN kullanicilar ON staj_kayit.ogrenci_id=kullanicilar.id
-INNER JOIN ogrenci_detay ON staj_kayit.ogrenci_id=ogrenci_detay.ogrenci_id
+                                            $query=$db->query("SELECT ad,soyad,email,tel,ogrenci_no,tc,internship_registration.id as kayit_id FROM internship_registration
+INNER JOIN Internship_date ON internship_registration.Internship_date_id=Internship_date.id
+INNER JOIN users ON internship_registration.ogrenci_id=users.id
+INNER JOIN student_details ON internship_registration.ogrenci_id=student_details.ogrenci_id
 WHERE NOW() BETWEEN DATE_ADD(staj_bitis, INTERVAL -7 DAY) AND staj_bitis AND sigorta_giris_onay=1");
 
-                                            $personeller = $query->fetchAll(PDO::FETCH_ASSOC);
+                                            $Staff = $query->fetchAll(PDO::FETCH_ASSOC);
 
                                             ?>
 
-                                            <?php foreach ($personeller as $personel): ?>
+                                            <?php foreach ($Staff as $personel): ?>
                                                 <tr>
                                                     <td><?php echo $personel["kayit_id"]; ?></td>
                                                     <td><?php echo $personel["ad"]." ".$personel["soyad"]; ?></td>
@@ -203,9 +203,9 @@ WHERE NOW() BETWEEN DATE_ADD(staj_bitis, INTERVAL -7 DAY) AND staj_bitis AND sig
 
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <label for="inputCity">Bölüm:</label>
+                                    <label for="inputCity">Section:</label>
                                     <select id="inputCity" name="bolum" class="form-control">
-                                        <?php foreach ($bolumler as $bolum): ?>
+                                        <?php foreach ($department as $bolum): ?>
                                             <option value="<?php echo $bolum["id"] ?>"><?php echo $bolum["bolum_ad"]; ?></option>
                                         <?php endforeach;?>
 
@@ -215,7 +215,7 @@ WHERE NOW() BETWEEN DATE_ADD(staj_bitis, INTERVAL -7 DAY) AND staj_bitis AND sig
                                     <label for="inputState">Ünvan:</label>
                                     <select id="inputState" name="unvan" class="form-control">
 
-                                        <?php foreach ($unvanlar as $unvan): ?>
+                                        <?php foreach ($titles as $unvan): ?>
                                             <option value="<?php echo $unvan["id"]; ?>"><?php echo $unvan["unvan_ad"]; ?></option>
                                         <?php endforeach;?>
                                     </select>

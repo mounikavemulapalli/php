@@ -1,18 +1,22 @@
 <?php
 session_start();
+if ($_SESSION["login"] && $_SESSION["users"]["role_ad"] == "personel"){ ?>
 
-// Check if the user is logged in and has the "personel" role
-if (isset($_SESSION["login"]) && $_SESSION["login"] === true && isset($_SESSION["user"]["rol_id"]) && $_SESSION["user"]["rol_id"] === "personel") {
-?>
 <!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
 <html lang="tr">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Consultant | Internship Tracking </title>
+  <title>Danışman | ÇÖMÜ STAJ TAKİP</title>
 
   <!-- Google Font: Source Sans Pro -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="../plugins/fontawesome-free/css/all.min.css">
   <!-- Theme style -->
@@ -49,66 +53,25 @@ if (isset($_SESSION["login"]) && $_SESSION["login"] === true && isset($_SESSION[
     </nav>
     <!-- /.navbar -->
 
-    <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
-      <!-- Your Page Content Here -->
-      <section class="content">
-        <div class="container-fluid">
-          <!-- Add your content here -->
-          <h1>Welcome, Staff!</h1>
-        </div>
-      </section>
-    </div>
-    <!-- /.content-wrapper -->
-
-    <!-- Modal for Logout Confirmation -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-          <div class="modal-content">
-              <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">Log Out</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                  </button>
-              </div>
-              <div class="modal-body">
-              Are you sure you want to log out?
-              </div>
-              <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                  <a href="../Log Out.php" class="btn btn-danger">Log Out</a>
+      <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">Log out</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                      </button>
+                  </div>
+                  <div class="modal-body">
+                  Are you sure you want to log out ?
+                  </div>
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">cancel</button>
+                      <a href="../cikis.php" type="button" class="btn btn-danger">exit</a>
+                  </div>
               </div>
           </div>
       </div>
-    </div>
-
-    <!-- Footer (Optional) -->
-    <footer class="main-footer">
-      <div class="float-right d-none d-sm-block">
-        <b>Version</b> 1.0.0
-      </div>
-      <strong>&copy; <?php echo date("Y"); ?> <a href="#">Internship Tracking</a>.</strong> All rights reserved.
-    </footer>
-
-  </div>
-  <!-- ./wrapper -->
-
-  <!-- REQUIRED SCRIPTS -->
-  <!-- jQuery -->
-  <script src="../plugins/jquery/jquery.min.js"></script>
-  <!-- Bootstrap 4 -->
-  <script src="../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <!-- AdminLTE App -->
-  <script src="../dist/js/adminlte.min.js"></script>
-</body>
-</html>
-<?php
-} else {
-    // If not logged in or not "personel", redirect to login page
-    header("Location: ../login.php");
-    exit();
-}
-?>
 
     <!-- Main Sidebar Container -->
    <?php include "../templates/personel-sidebar.php"?>
@@ -120,12 +83,12 @@ if (isset($_SESSION["login"]) && $_SESSION["login"] === true && isset($_SESSION[
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
-              <h1 class="m-0">Gösterge Paneli</h1>
+              <h1 class="m-0">Dashboard</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="#">Anasayfa</a></li>
-                <li class="breadcrumb-item active">Gösterge Paneli</li>
+                <li class="breadcrumb-item"><a href="#">Home Page</a></li>
+                <li class="breadcrumb-item active">Dashboard</li>
               </ol>
             </div><!-- /.col -->
           </div><!-- /.row -->
@@ -139,7 +102,7 @@ if (isset($_SESSION["login"]) && $_SESSION["login"] === true && isset($_SESSION[
             <div class="row">
                 <?php
                 require "../config.php";
-                $query= $db->prepare("SELECT * FROM kullanicilar WHERE rol_id=:kid");
+                $query= $db->prepare("SELECT * FROM users WHERE rol_id=:kid");
                 $query->execute([
                     "kid"=>4
                 ]);
@@ -150,13 +113,13 @@ if (isset($_SESSION["login"]) && $_SESSION["login"] === true && isset($_SESSION[
                     <div class="small-box bg-info">
                         <div class="inner">
                             <h3><?php echo $ogr_sayi  ?></h3>
-                            <p>Kayıtlı Öğrenci Sayısı</p>
+                            <p>Number of Registered Students</p>
                         </div>
                         <div class="icon">
                             <i class="fa-solid fa-graduation-cap"></i>
                         </div>
                         <a href="#" class="small-box-footer">
-                            Detaylı Bilgi <i class="fas fa-arrow-circle-right"></i>
+                            Detailed Information <i class="fas fa-arrow-circle-right"></i>
                         </a>
                     </div>
                 </div>
@@ -167,10 +130,10 @@ if (isset($_SESSION["login"]) && $_SESSION["login"] === true && isset($_SESSION[
             <div class="col-lg-3 col-6">
                 <?php
 
-                    $query= $db->query("SELECT ad,soyad,email,tel,ogrenci_no,tc,staj_kayit.id as kayit_id FROM staj_kayit
-INNER JOIN staj_tarih ON staj_kayit.staj_tarih_id=staj_tarih.id
-INNER JOIN kullanicilar ON staj_kayit.ogrenci_id=kullanicilar.id
-INNER JOIN ogrenci_detay ON staj_kayit.ogrenci_id=ogrenci_detay.ogrenci_id
+                    $query= $db->query("SELECT ad,soyad,email,tel,ogrenci_no,tc,internship_registration.id as kayit_id FROM internship_registration
+INNER JOIN Internship_date ON internship_registration.Internship_date_id=Internship_date.id
+INNER JOIN users ON internship_registration.ogrenci_id=users.id
+INNER JOIN student_details ON internship_registration.ogrenci_id=student_details.ogrenci_id
 WHERE NOW() BETWEEN staj_baslangic AND DATE_ADD(staj_baslangic, INTERVAL 7 DAY) AND sigorta_giris_onay=0");
                     $sayi = $query->rowCount();
                 ?>
@@ -183,15 +146,15 @@ WHERE NOW() BETWEEN staj_baslangic AND DATE_ADD(staj_baslangic, INTERVAL 7 DAY) 
                     <i class="fa-solid fa-circle-check"></i>
                 </div>
                 <a href="#" class="small-box-footer">
-                  Detaylı Bilgi <i class="fas fa-arrow-circle-right"></i>
+                  Detailed Information <i class="fas fa-arrow-circle-right"></i>
                 </a>
               </div>
             </div>
               <?php
-              $query= $db->query("SELECT ad,soyad,email,tel,ogrenci_no,tc,staj_kayit.id as kayit_id FROM staj_kayit
-INNER JOIN staj_tarih ON staj_kayit.staj_tarih_id=staj_tarih.id
-INNER JOIN kullanicilar ON staj_kayit.ogrenci_id=kullanicilar.id
-INNER JOIN ogrenci_detay ON staj_kayit.ogrenci_id=ogrenci_detay.ogrenci_id
+              $query= $db->query("SELECT ad,soyad,email,tel,ogrenci_no,tc,internship_registration.id as kayit_id FROM internship_registration
+INNER JOIN Internship_date ON internship_registration.Internship_date_id=Internship_date.id
+INNER JOIN users ON internship_registration.ogrenci_id=users.id
+INNER JOIN student_details ON internship_registration.ogrenci_id=student_details.ogrenci_id
 WHERE NOW() BETWEEN DATE_ADD(staj_bitis, INTERVAL -7 DAY) AND staj_bitis AND sigorta_giris_onay=1");
 
               $danisman_sayi = $query->rowCount();
@@ -201,13 +164,13 @@ WHERE NOW() BETWEEN DATE_ADD(staj_bitis, INTERVAL -7 DAY) AND staj_bitis AND sig
               <div class="small-box bg-danger">
                 <div class="inner">
                   <h3><?= $danisman_sayi ?></h3>
-                  <p>Sigorta Çıkışı Yapılacaklar</p>
+                  <p>Insurance Exits to Be Made</p>
                 </div>
                 <div class="icon">
                     <i class="fa-solid fa-circle-xmark"></i>
                 </div>
                 <a href="#" class="small-box-footer">
-                  Detaylı Bilgi <i class="fas fa-arrow-circle-right"></i>
+                  Detailed Information <i class="fas fa-arrow-circle-right"></i>
                 </a>
               </div>
             </div>
@@ -236,9 +199,8 @@ WHERE NOW() BETWEEN DATE_ADD(staj_bitis, INTERVAL -7 DAY) AND staj_bitis AND sig
       <!-- To the right -->
 
       <!-- Default to the left -->
-      <strong>Copyright &copy; 2022-2023 <a href="https://www.comu.edu.tr/">Çanakkale 18 Mart Üniversitesi</a>.</strong>
-      Tüm
-      Hakları Saklıdır.
+      <strong>Copyright &copy; 2022-2023 <a href="https://www.comu.edu.tr/"></a>.</strong>
+     All Rights Reserved.
     </footer>
   </div>
   <!-- ./wrapper -->

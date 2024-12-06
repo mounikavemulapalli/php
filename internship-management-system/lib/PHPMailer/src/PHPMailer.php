@@ -2253,7 +2253,7 @@ class PHPMailer
             'empty_message' => 'Message body empty',
             'encoding' => 'Unknown encoding: ',
             'execute' => 'Could not execute: ',
-            'extension_missing' => 'Extension missing: ',
+            'extension_missing' => ' missing: ',
             'file_access' => 'Could not access file: ',
             'file_open' => 'File Error: Could not open file: ',
             'from_failed' => 'The following From address failed: ',
@@ -2999,7 +2999,7 @@ class PHPMailer
         } elseif ($this->sign_key_file) {
             try {
                 if (!defined('PKCS7_TEXT')) {
-                    throw new Exception($this->lang('extension_missing') . 'openssl');
+                    throw new Exception($this->lang('_missing') . 'openssl');
                 }
 
                 $file = tempnam(sys_get_temp_dir(), 'srcsign');
@@ -3651,7 +3651,7 @@ class PHPMailer
      * @param string $string      String attachment data
      * @param string $filename    Name of the attachment
      * @param string $encoding    File encoding (see $Encoding)
-     * @param string $type        File extension (MIME) type
+     * @param string $type        File  (MIME) type
      * @param string $disposition Disposition to use
      *
      * @throws Exception
@@ -3774,12 +3774,12 @@ class PHPMailer
     /**
      * Add an embedded stringified attachment.
      * This can include images, sounds, and just about any other document type.
-     * If your filename doesn't contain an extension, be sure to set the $type to an appropriate MIME type.
+     * If your filename doesn't contain an , be sure to set the $type to an appropriate MIME type.
      *
      * @param string $string      The attachment binary data
      * @param string $cid         Content ID of the attachment; Use this to reference
      *                            the content when using an embedded image in HTML
-     * @param string $name        A filename for the attachment. If this contains an extension,
+     * @param string $name        A filename for the attachment. If this contains an ,
      *                            PHPMailer will attempt to set a MIME type for the attachment.
      *                            For example 'file.jpg' would get an 'image/jpeg' MIME type.
      * @param string $encoding    File encoding (see $Encoding), defaults to 'base64'
@@ -4294,7 +4294,7 @@ class PHPMailer
                             $cid,
                             $filename,
                             static::ENCODING_BASE64,
-                            static::_mime_types((string) static::mb_pathinfo($filename, PATHINFO_EXTENSION))
+                            static::_mime_types((string) static::mb_pathinfo($filename, PATHINFO_))
                         )
                     ) {
                         $message = preg_replace(

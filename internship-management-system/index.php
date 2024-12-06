@@ -21,10 +21,10 @@
     <div class="container mt-3">
         <div class="header d-flex flex-row justify-content-between align-items-center ">
             <a href="index.html" class="header_logo d-inline-flex text-decoration-none align-items-center text-white">
-                <img src="dist/img/comu_logo_4.png" alt="" width="110" height="110" />
+                <img src="dist/img/the-entrepreneurship-network-cover.jpg" alt="" width="110" height="110" />
                 <div class="ms-2">
                     <h1 class="text-uppercase fw-bold fs-6">
-                    Canakkale 18 Mart University
+                        TEN Network
                     </h1>
                     <span class="text-capitalize">Internship Tracking System</span>
                 </div>
@@ -48,71 +48,74 @@
 
                 <div class="card px-2 py-3" style="width: 22rem;">
                     <div class="card-body">
-                    <?php
-require ("config.php");
+                        <?php
+                        require ("config.php");
 
-if (isset($_POST["email"]) || isset($_POST["sifre"])) {
+                        if (isset($_POST["email"]) || isset($_POST["sifre"]) ){
 
-    $email = $_POST["email"];
-    $sifre = md5($_POST["sifre"]); // It's still using md5, consider using password_hash() for better security
+                            $email= $_POST["email"];
+                            $sifre= md5($_POST["sifre"]);
 
-    // Corrected SQL query with backticks around column names with spaces
-    $query = $db->prepare("SELECT users.id, `First Name`, `Last Name`, email, sifreHash, rol_id 
-                           FROM users 
-                           INNER JOIN roles ON users.rol_id = roles.id 
-                           WHERE email=:useremail AND sifreHash=:usersifreHash");
+                            $query = $db->prepare("SELECT users.id,ad,soyad,email,role_ad FROM users INNER JOIN roles ON users.rol_id = roles.id WHERE email=:kemail AND sifreHash=:ksifreHash");
+                            $query->execute([
+                                    "kemail" =>$email,
+                                    "ksifreHash" =>$sifre
+                            ]);
+                            $data = $query->fetch(PDO::FETCH_ASSOC);
 
-    $query->execute([
-        "useremail" => $email,
-        "usersifreHash" => $sifre
-    ]);
+                            $kontrol = $query->rowCount();
+                            //print_r($data);
 
-    $data = $query->fetch(PDO::FETCH_ASSOC);
+                            if($kontrol==0){
+                                // Giriş Başarısız İse Yönlendir;
+                                header("Location:index.php");
+                            }else{
+                                session_start();
+                                $_SESSION["users"] = $data;
+                                $_SESSION["login"] = true;
 
-    $control = $query->rowCount();
-    // Check if the query returns any rows (if login credentials are valid)
-    if ($control == 0) {
-        // If no rows are returned (unsuccessful login), redirect to the index page
-        header("Location:index.php");
-    } else {
-        // If rows are returned (successful login), start the session and set session variables
-        session_start();
-        $_SESSION["user"] = $data; // Store user data in session
-        $_SESSION["login"] = true; // Set a flag indicating that the user is logged in
+                                // Giriş Başarılı ise;
+                                switch ($data["role_ad"]){
+                                    case "manager":
+                                        header("Location:Management/index.php");
+                                        break;
+                                    case "danışman":
+                                        header("Location:Consultant/index.php");
+                                        break;
+                                    case "personel":
+                                        header("Location:personel/index.php");
+                                        break;
+                                    default:
+                                        header("Location:ogrenci/index.php");
 
-        // Redirect based on the user's role
-        switch ($data["rol_id"]) {
-            case "manager":
-                header("Location:management/index.php");
-                break;
-            case "consultant":
-                header("Location:consultant/index.php");
-                break;
-            case "staff":
-                header("Location:staff/index.php");
-                break;
-            default:
-                header("Location:student/index.php");
-        }
-    }
-}
-   //print_r($data);
+                                }
+
+                            }
+
+
+
+
+                        }
+
+
+
+                        //print_r($data);
                         ?>
                         <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post">
                             <div class="mb-3 d-flex justify-content-center">
-                                <img src="dist/img/comu_logo_4.png" alt="" class="" width="125" height="125">
+                                <img src="dist/img/the-entrepreneurship-network-cover.jpg" alt="" class="" width="125" height="125">
                             </div>
                             <div class="mb-3">
-                                <label for="mail" class="form-label">Email address:</label>
+                                <label for="mail" class="form-label">Email Address:</label>
                                 <input type="text" class="form-control" id="mail" name="email" required
-                                       placeholder="Enter Email Id:">
+                                       placeholder="öğrencinumarası@ogr.comu.edu.tr">
                             </div>
                             <div class="mb-3">
                                 <label for="sifre" class="form-label">Password:</label>
                                 <input type="password" class="form-control" id="sifre" name="sifre" required
                                        placeholder="Şifre Giriniz">
                             </div>
-                            <button type="submit"  class="btn btn-primary">Login</button>
+                            <button type="submit"  class="btn btn-primary">Submit</button>
                         </form>
 
                     </div>
@@ -123,25 +126,29 @@ if (isset($_POST["email"]) || isset($_POST["sifre"])) {
 
     <div class="container">
 
-    <div class="my-5">
-    <h1 class="fs-3 header-color fw-bold">What is the Internship Tracking Management System?</h1>
-    <div class="card w-75">
-        <p>
-            The system provided to  faculty members and staff for accessing services such as UBYS, Eduroam, the library, and file sharing.
-        </p>
-        <p>
-            With the  Single Account, you can change your password and access new services through the Single Account service. 
-            You can benefit from all of digital services with a single username and password.
-        </p>
-    </div>
-</div>
+        <div class="my-5">
+            <h1 class="fs-3 header-color fw-bold">Internship Tracking Management System ? </h1>
+            <div class="card w-75">
+                <p>
+                    ÇOMÜ akademisyenlerine ve personeline sunulan ubys, eduroam, kütüphane ve dosya paylaşım sistemi
+                    gibi
+                    hizmetlere erişim için kullanabileceğiniz bir hesap yönetim sistemidir.
+                </p>
+                <p>
+                    ÇOMÜ Tek Hesap sayesinde parolanızı değiştirebilir ve yeni servislere Tek Hesap servisi üzerinden
+                    ulaşabilirsiniz. Tek kullanıcı adı ve parola ile ÇOMÜ’nün tüm dijital hizmetlerinden
+                    faydalanabilirsiniz.
+                </p>
+            </div>
 
+        </div>
     </div>
 
     <div class="container">
         <div class="footer">
-        <span class="text-white small">All Rights Reserved. Services are provided in accordance with the rules specified in the Privacy, Usage, and Copyright Notice.</span>
-
+            <span class="text-white small">All Rights Reserved. Gizlilik, Kullanım ve Telif Hakları bildiriminde
+                belirtilen kurallar
+                çerçevesinde hizmet sunulmaktadır.</span>
         </div>
     </div>
 

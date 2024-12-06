@@ -1,7 +1,7 @@
 <?php
 session_start();
 require "../config.php";
-if ($_SESSION["login"] && $_SESSION["kullanici"]["role_ad"] == "müdür"){ ?>
+if ($_SESSION["login"] && $_SESSION["users"]["role_ad"] == "manager"){ ?>
 
 
 <!DOCTYPE html>
@@ -89,7 +89,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1 class="m-0">Bölüm İşlemleri</h1>
+                            <h1 class="m-0">Department Operations</h1>
                         </div><!-- /.col -->
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
@@ -107,7 +107,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Bölüm Ekle</h5>
+                            <h5 class="modal-title" id="exampleModalLabel">Add Department</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -116,14 +116,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             <form action="../ajax/bolum_kayit.php" method="post" id="personel_kaydet">
                               
                                 <div class="form-group">
-                                    <label for="inputAddress">Bölüm Adı:</label>
-                                    <input type="text" name="bolum_ad" class="form-control" id="inputAddress" placeholder="Bölüm adı giriniz">
+                                    <label for="inputAddress">Department Name:</label>
+                                    <input type="text" name="bolum_ad" class="form-control" id="inputAddress" placeholder="Section adı giriniz">
                                 </div>
                             </form>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
-                            <button type="button" class="btn btn-primary" id="kaydet">Kaydet</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" id="kaydet">Save</button>
                         </div>
                     </div>
                 </div>
@@ -147,18 +147,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                             <thead>
                                                 <tr>
                                                     <th>id</th>
-                                                    <th>Bölüm Adı</th>
-                                                    <th>İşlemler</th>
+                                                    <th>Department Name</th>
+                                                    <th>Operations</th>
                                                     
                                                 </tr>
                                             </thead>
                                             <tbody>
                                             <?php
-                                            $query=$db->query("SELECT * FROM bolumler");
-                                            $bolumler = $query->fetchAll(PDO::FETCH_ASSOC);
+                                            $query=$db->query("SELECT * FROM department");
+                                            $department = $query->fetchAll(PDO::FETCH_ASSOC);
                                             ?>
 
-                                            <?php foreach ($bolumler as $bolum): ?>
+                                            <?php foreach ($department as $bolum): ?>
                                                 <tr>
                                                     <td><?php echo $bolum["id"]; ?></td>
                                                     <td><?php echo $bolum["bolum_ad"];?></td>
@@ -215,9 +215,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <label for="inputCity">Bölüm:</label>
+                                    <label for="inputCity">Section:</label>
                                     <select id="inputCity" name="bolum" class="form-control">
-                                        <?php foreach ($bolumler as $bolum): ?>
+                                        <?php foreach ($department as $bolum): ?>
                                             <option value="<?php echo $bolum["id"] ?>"><?php echo $bolum["bolum_ad"]; ?></option>
                                         <?php endforeach;?>
 
@@ -227,7 +227,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     <label for="inputState">Ünvan:</label>
                                     <select id="inputState" name="unvan" class="form-control">
 
-                                        <?php foreach ($unvanlar as $unvan): ?>
+                                        <?php foreach ($titles as $unvan): ?>
                                             <option value="<?php echo $unvan["id"]; ?>"><?php echo $unvan["unvan_ad"]; ?></option>
                                         <?php endforeach;?>
                                     </select>

@@ -1,6 +1,6 @@
 <?php
 session_start();
-if ($_SESSION["login"] && $_SESSION["kullanici"]["role_ad"] == "danışman"){ ?>
+if ($_SESSION["login"] && $_SESSION["users"]["role_ad"] == "danışman"){ ?>
 
 <!DOCTYPE html>
 <!--
@@ -12,7 +12,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Advisor | ÇÖMÜ INTERNSHIP TRACKING</title>
+  <title>Consultant | Internship Tracking</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet"
@@ -63,18 +63,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
                       </button>
                   </div>
                   <div class="modal-body">
-                      Are you sure you want to log out?
+                  Are you sure you want to log out ?
                   </div>
                   <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                      <a href="../cikis.php" type="button" class="btn btn-danger">Log Out</a>
+                      <a href="../cikis.php" type="button" class="btn btn-danger">Exit</a>
                   </div>
               </div>
           </div>
       </div>
 
     <!-- Main Sidebar Container -->
-   <?php include "../templates/advisor-sidebar.php"?>
+   <?php include "../templates/danisman-sidebar.php"?>
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
@@ -87,7 +87,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </div><!-- /.col -->
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item"><a href="#">Home Page</a></li>
                 <li class="breadcrumb-item active">Dashboard</li>
               </ol>
             </div><!-- /.col -->
@@ -104,19 +104,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <div class="col-lg-3 col-6">
                 <?php
                     require "../config.php";
-                    $query= $db->prepare("SELECT staj_kayit.id as kayit_id,ad,soyad,ogrenci_no,tel FROM staj_kayit
-INNER JOIN ogrenci_detay ON staj_kayit.ogrenci_id=ogrenci_detay.ogrenci_id
-INNER JOIN kullanicilar ON staj_kayit.ogrenci_id=kullanicilar.id
-WHERE ogrenci_detay.danisman_id_fk=:danisman_id AND staj_kayit.danisman_onay=0");
+                    $query= $db->prepare("SELECT internship_registration.id as kayit_id,ad,soyad,ogrenci_no,tel FROM internship_registration
+INNER JOIN student_details ON internship_registration.ogrenci_id=student_details.ogrenci_id
+INNER JOIN users ON internship_registration.ogrenci_id=users.id
+WHERE student_details.danisman_id_fk=:danisman_id AND internship_registration.danisman_onay=0");
                     $query->execute([
-                        "danisman_id"=>$_SESSION["kullanici"]["id"]
+                        "danisman_id"=>$_SESSION["users"]["id"]
                     ]);
-                    $student_count = $query->rowCount();
+                    $ogrenci_sayi = $query->rowCount();
                 ?>
               <div class="small-box bg-warning">
                 <div class="inner">
-                  <h3 class="text-white"><?php echo $student_count ?></h3>
-                  <p class="text-white">Pending Approvals</p>
+                  <h3 class="text-white"><?php echo $ogrenci_sayi ?></h3>
+                  <p class="text-white">Pending Transactions</p>
                 </div>
                 <div class="icon">
                     <i class="fa-solid fa-calendar-check"></i>
@@ -127,21 +127,21 @@ WHERE ogrenci_detay.danisman_id_fk=:danisman_id AND staj_kayit.danisman_onay=0")
               </div>
             </div>
               <?php
-              $query= $db->prepare("SELECT staj_kayit.id as kayit_id,ad,soyad,ogrenci_no,tel FROM staj_kayit
-INNER JOIN ogrenci_detay ON staj_kayit.ogrenci_id=ogrenci_detay.ogrenci_id
-INNER JOIN kullanicilar ON staj_kayit.ogrenci_id=kullanicilar.id
-WHERE ogrenci_detay.danisman_id_fk=:danisman_id AND staj_kayit.danisman_onay=1");
+              $query= $db->prepare("SELECT internship_registration.id as kayit_id,ad,soyad,ogrenci_no,tel FROM internship_registration
+INNER JOIN student_details ON internship_registration.ogrenci_id=student_details.ogrenci_id
+INNER JOIN users ON internship_registration.ogrenci_id=users.id
+WHERE student_details.danisman_id_fk=:danisman_id AND internship_registration.danisman_onay=1");
               $query->execute([
-                  "danisman_id"=>$_SESSION["kullanici"]["id"]
+                  "danisman_id"=>$_SESSION["users"]["id"]
               ]);
-              $advisor_count = $query->rowCount();
+              $danisman_sayi = $query->rowCount();
               ?>
             <div class="col-lg-3 col-6">
 
               <div class="small-box bg-success">
                 <div class="inner">
-                  <h3><?php echo $advisor_count ?></h3>
-                  <p>Approved Internships</p>
+                  <h3><?php echo $danisman_sayi ?></h3>
+                  <p>Total Approved Internships</p>
                 </div>
                 <div class="icon">
                     <i class="fa-solid fa-circle-check"></i>
@@ -151,6 +151,12 @@ WHERE ogrenci_detay.danisman_id_fk=:danisman_id AND staj_kayit.danisman_onay=1")
                 </a>
               </div>
             </div>
+
+
+
+
+
+
 
             <!-- /.col-md-6 -->
           </div>
@@ -170,8 +176,9 @@ WHERE ogrenci_detay.danisman_id_fk=:danisman_id AND staj_kayit.danisman_onay=1")
       <!-- To the right -->
 
       <!-- Default to the left -->
-      <strong>Copyright &copy; 2022-2023 <a href="https://www.comu.edu.tr/">Çanakkale 18 Mart University</a>.</strong>
-      All Rights Reserved.
+      <strong>Copyright &copy; 2022-2023 <a href="https://www.comu.edu.tr/">TEN Network</a>.</strong>
+      Tüm
+      Hakları Saklıdır.
     </footer>
   </div>
   <!-- ./wrapper -->

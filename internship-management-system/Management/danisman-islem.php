@@ -1,7 +1,7 @@
 <?php
 session_start();
 require "../config.php";
-if ($_SESSION["login"] && $_SESSION["user"]["rol_id"] == "manager"){ ?>
+if ($_SESSION["login"] && $_SESSION["users"]["role_ad"] == "manager"){ ?>
 
 
 <!DOCTYPE html>
@@ -89,16 +89,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1 class="m-0">Danışman İşlemleri</h1>
+                            <h1 class="m-0">Consultant Procedures</h1>
                         </div><!-- /.col -->
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
                                 <button type="button" class="btn btn-info mr-3" data-toggle="modal" data-target="#unvan_ekle">
-                                    Ünvan Ekle / Çıkar
+                                    Add / Remove Title
                                 </button>
 
                                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ekle_danisman">
-                                    Ekle
+                                    Add
                                 </button>
                             </ol>
                         </div><!-- /.col -->
@@ -139,17 +139,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                                     $query=$db->prepare("SELECT * FROM bolumler");
                                     $query->execute();
-                                    $bolumler = $query->fetchAll(PDO::FETCH_ASSOC);
+                                    $department = $query->fetchAll(PDO::FETCH_ASSOC);
 
 
-                                    $query=$db->prepare("SELECT * FROM unvanlar");
+                                    $query=$db->prepare("SELECT * FROM titles");
                                     $query->execute();
-                                    $unvanlar = $query->fetchAll(PDO::FETCH_ASSOC);
+                                    $titles = $query->fetchAll(PDO::FETCH_ASSOC);
 
                                 ?>
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
-                                        <label for="inputCity">Bölüm:</label>
+                                        <label for="inputCity">Section:</label>
                                         <select id="inputCity" name="bolum" class="form-control">
                                             <?php foreach ($bolumler as $bolum): ?>
                                                 <option value="<?php echo $bolum["id"] ?>"><?php echo $bolum["bolum_ad"]; ?></option>
@@ -161,7 +161,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         <label for="inputState">Ünvan:</label>
                                         <select id="inputState" name="unvan" class="form-control">
 
-                                            <?php foreach ($unvanlar as $unvan): ?>
+                                            <?php foreach ($titles as $unvan): ?>
                                                 <option value="<?php echo $unvan["id"]; ?>"><?php echo $unvan["unvan_ad"]; ?></option>
                                             <?php endforeach;?>
                                         </select>
@@ -198,18 +198,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                 <tr>
                                                     <th>id</th>
                                                     <th>Ünvan</th>
-                                                    <th>Ad Soyad</th>
-                                                    <th>Bölüm</th>
+                                                    <th>Name Surname</th>
+                                                    <th>Section</th>
                                                     <th>E-Posta</th>
-                                                    <th>İşlemler</th>
+                                                    <th>Transactions</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                             <?php
-                                            $query=$db->query(" SELECT kullanicilar.id,kullanicilar.ad,kullanicilar.soyad,kullanicilar.email,bolumler.bolum_ad,unvanlar.unvan_ad from danisman_detay
-INNER JOIN kullanicilar ON kullanicilar.id=danisman_detay.danisman_id
-INNER JOIN unvanlar ON unvanlar.id=danisman_detay.unvan_id
-INNER JOIN bolumler ON bolumler.id=danisman_detay.bolum_id");
+                                            $query=$db->query(" SELECT users.id,users.ad,users.soyad,users.email,bolumler.bolum_ad,titles.unvan_ad from advisor_details
+INNER JOIN users ON users.id=advisor_details.danisman_id
+INNER JOIN titles ON titles.id=advisor_details.title_id
+INNER JOIN department ON bolumler.id=advisor_details.bolum_id");
                                             $danismanlar = $query->fetchAll(PDO::FETCH_ASSOC);
 
                                             ?>
@@ -248,7 +248,7 @@ INNER JOIN bolumler ON bolumler.id=danisman_detay.bolum_id");
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Ünvan İşlemleri</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Title Transactions</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -257,7 +257,7 @@ INNER JOIN bolumler ON bolumler.id=danisman_detay.bolum_id");
                         <form action="../ajax/unvan_kayit.php" method="post" id="unvan_form">
 
                             <div class="form-group">
-                                <label for="inputAddress">Ünvan Adını Giriniz:</label>
+                                <label for="inputAddress">Enter Title Name:</label>
                                 <input type="text" name="unvan_ad" class="form-control" id="inputAddress" placeholder="Ünvan giriniz...">
                             </div>
 
@@ -272,9 +272,9 @@ INNER JOIN bolumler ON bolumler.id=danisman_detay.bolum_id");
                              </thead>
                              <tbody>
                              <?php
-                             $unvanlar=$db->query("SELECT * FROM unvanlar");
+                             $titles=$db->query("SELECT * FROM titles");
                              ?>
-                             <?php foreach ($unvanlar as $unvan): ?>
+                             <?php foreach ($titles as $unvan): ?>
                                 <tr>
                                     <td><?= $unvan["unvan_ad"] ?></td>
                                     <td>

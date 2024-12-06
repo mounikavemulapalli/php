@@ -1,7 +1,7 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="../staff/index.php" class="brand-link">
-        <img src="../dist/img/comu_logo_4.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+    <a href="../Management/index.php" class="brand-link">
+        <img src="../dist/img/the-entrepreneurship-network-cover.jpg" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
              style="opacity: 1">
         <span class="brand-text font-weight-light">Internship Tracking</span>
     </a>
@@ -15,12 +15,13 @@
             </div>
             <div class="info">
                 <?php
-                    $full_name = $_SESSION["user"]["first_name"]." ".$_SESSION["user"]["last_name"];
+                    $ad_soyad = $_SESSION["users"]["ad"]." ".$_SESSION["users"]["soyad"];
                 ?>
-                <a href="#" class="d-block"><?php echo $full_name; ?></a>
+                <a href="#" class="d-block"><?php echo $ad_soyad; ?></a>
             </div>
         </div>
-        -->
+ -->
+
 
         <!-- Sidebar Menu -->
         <nav class="mt-2">
@@ -28,58 +29,86 @@
                 <!-- Add icons to the links using the .nav-icon class
                    with font-awesome or any other icon font library -->
                 <li class="nav-item">
-                    <a href="../staff/student-process.php" class="nav-link">
+                    <a href="../Management/ogrenci-islem.php" class="nav-link">
                         <i class="fa-solid fa-graduation-cap"></i>
                         <p>
-                            Student Processes
-                            <!--                            <i class="right fas fa-angle-left"></i>-->
+                            Student Transaction
+<!--                            <i class="right fas fa-angle-left"></i>-->
                         </p>
                     </a>
 <!--                    <ul class="nav nav-treeview">-->
 <!--                        <li class="nav-item">-->
 <!--                            <a href="#" class="nav-link">-->
 <!--                                <i class="far fa-circle nav-icon"></i>-->
-<!--                                <p>Add/Edit Student</p>-->
+<!--                                <p>Öğrenci Ekle/Düzenle</p>-->
 <!--                            </a>-->
 <!--                        </li>-->
 <!--                        <li class="nav-item">-->
 <!--                            <a href="#" class="nav-link">-->
 <!--                                <i class="far fa-circle nav-icon"></i>-->
-<!--                                <p>Student</p>-->
+<!--                                <p>Öğrenci </p>-->
 <!--                            </a>-->
 <!--                        </li>-->
 <!--                    </ul>-->
                 </li>
 
-            </ul>
-            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                <!-- Add icons to the links using the .nav-icon class
-                   with font-awesome or any other icon font library -->
-                <li class="nav-item menu-open">
-                    <a href="../consultant/internship-process.php" class="nav-link">
+                <li class="nav-item">
+                    <a href="danisman-islem.php" class="nav-link">
+                        <i class="fa-solid fa-building-columns"></i>
+                        <p>
+                           Consultants
+                        </p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="../Management/personel-islem.php" class="nav-link">
+                        <i class="fa-solid fa-user-tie"></i>
+                        <p>
+                           Staff
+                        </p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="../Management/bolum-islem.php" class="nav-link">
+                        <i class="fa-solid fa-book"></i>
+                        <p>
+                        Sections
+                        </p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="../Management/staj-tarih-islem.php" class="nav-link">
+                        <i class="fa-solid fa-clock"></i>
+                        <p>
+                            Internship dates
+                        </p>
+                    </a>
+                </li>
+
+
+
+                <li class="nav-item">
+                    <a href="../Management/staj-islem.php" class="nav-link">
                         <i class="fa-solid fa-pen-to-square"></i>
                         <p>
-                            Insurance Processes
+                            Internship Procedures
                             <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="../staff/insurance-entry.php" class="nav-link">
+                            <a href="../Management/staj-islem.php" class="nav-link">
                                 <i class="fa-solid fa-check"></i>
-                                <p>Insurance Entry</p>
+                                <p>Confirm Internship</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="../staff/insurance-exit.php" class="nav-link">
-                                <i class="fa-solid fa-arrow-right-from-bracket"></i>
-                                <p>Insurance Exit</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="../staff/insurance-list.php" class="nav-link">
+                            <a href="../Management/View_internship.php" class="nav-link">
                                 <i class="fa-solid fa-list"></i>
-                                <p>List Insurance Records</p>
+                                <p>View Internships </p>
                             </a>
                         </li>
                     </ul>

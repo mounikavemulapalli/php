@@ -1,36 +1,36 @@
 <?php
 session_start();
 require "../config.php";
-if ($_SESSION["login"] && $_SESSION["users"]["rol_id"] == "personel"){ ?>
+if ($_SESSION["login"] && $_SESSION["users"]["role_ad"] == "danışman"){ ?>
 
 
-<!DOCTYPE html>
-<!--
-This is a starter template page. Use this page to start your new project from
-scratch. This page gets rid of all links and provides the needed markup only.
--->
-<html lang="tr">
+    <!DOCTYPE html>
+    <!--
+    This is a starter template page. Use this page to start your new project from
+    scratch. This page gets rid of all links and provides the needed markup only.
+    -->
+    <html lang="tr">
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>staff | Internship Tracking</title>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Danışman | ÇÖMÜ STAJ TAKİP</title>
 
-    <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="../plugins/fontawesome-free/css/all.min.css">
-    <!-- Theme style -->
-    <link rel="stylesheet" href="../dist/css/adminlte.min.css">
-    <script src="https://kit.fontawesome.com/1f952dc3e7.js" crossorigin="anonymous"></script>
+        <!-- Google Font: Source Sans Pro -->
+        <link rel="stylesheet"
+              href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+        <!-- Font Awesome Icons -->
+        <link rel="stylesheet" href="../plugins/fontawesome-free/css/all.min.css">
+        <!-- Theme style -->
+        <link rel="stylesheet" href="../dist/css/adminlte.min.css">
+        <script src="https://kit.fontawesome.com/1f952dc3e7.js" crossorigin="anonymous"></script>
 
-    <link rel="stylesheet" href="../plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
-    <link rel="stylesheet" href="../plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
-    <link rel="stylesheet" href="../plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
-</head>
+        <link rel="stylesheet" href="../plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+        <link rel="stylesheet" href="../plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+        <link rel="stylesheet" href="../plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+    </head>
 
-<body class="hold-transition sidebar-mini">
+    <body class="hold-transition sidebar-mini">
     <div class="wrapper">
 
         <!-- Navbar -->
@@ -63,24 +63,24 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Log Out</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Çıkış Yap</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                    Are you sure you want to log out ?
+                        Çıkış yapmak istediğinize emin misiniz ?
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                        <a href="../cikis.php" type="button" class="btn btn-danger">Log Out</a>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+                        <a href="../cikis.php" type="button" class="btn btn-danger">Çıkış</a>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Main Sidebar Container -->
-        <?php include "../templates/personel-sidebar.php"?>
+        <?php include "../templates/danisman-sidebar.php"?>
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
@@ -89,74 +89,20 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1 class="m-0">Student Operations</h1>
+                            <h1 class="m-0">Stajları Göster</h1>
                         </div><!-- /.col -->
-                        <div class="col-sm-6">
-                            <ol class="breadcrumb float-sm-right">
-                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ekle_danisman">
-                                Add
-                                </button>
-                            </ol>
-                        </div><!-- /.col -->
+<!--                        <div class="col-sm-6">-->
+<!--                            <ol class="breadcrumb float-sm-right">-->
+<!--                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ekle_danisman">-->
+<!--                                    Ekle-->
+<!--                                </button>-->
+<!--                            </ol>-->
+<!--                        </div>/.col -->
                     </div><!-- /.row -->
                 </div><!-- /.container-fluid -->
             </div>
             <!-- /.content-header -->
 
-            <div class="modal fade" id="ekle_danisman" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Add Student</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <form action="../ajax/per_ogr_kayit.php" method="post" id="personel_kaydet">
-                                <div class="form-row">
-                                    <div class="form-group col-md-6">
-                                        <label for="inputEmail4">Name:</label>
-                                        <input type="text" name="ad" class="form-control" id="inputEmail4" placeholder="Ad">
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label for="inputPassword4">Last Name:</label>
-                                        <input type="text" name="soyad" class="form-control" id="inputPassword4" placeholder="Soyad">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="inputAddress">Student ID:</label>
-                                    <input type="number" name="no" class="form-control" id="inputAddress" placeholder="xxxxxxxxx">
-                                </div>
-                                <div class="form-group">
-                                    <label for="exampleFormControlSelect1">Department:</label>
-                                    <?php
-                                        $query= $db->query("SELECT * FROM Department");
-                                        $bolumler = $query->fetchAll();
-                                    ?>
-                                    <select class="form-control" id="department_name" name="department">
-                                        <option>Select Department</option>
-                                        <?php foreach ($bolumler as $bolum): ?>
-                                        <option value="<?= $bolum["id"] ?>"><?= $bolum["bolum_ad"] ?> </option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="exampleFormControlSelect1">Danışman:</label>
-                                    <select class="form-control" id="danisman" name="danisman_id">
-                                        <option>Danışman Seçiniz</option>
-                                    </select>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
-                            <button type="button" class="btn btn-primary" id="kaydet">Kaydet</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
 
             <!-- Main content -->
@@ -171,31 +117,58 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <table id="example1"
-                                            class="table table-bordered table-striped dataTable dtr-inline"
-                                            aria-describedby="example1_info">
+                                               class="table table-bordered table-striped dataTable dtr-inline"
+                                               aria-describedby="example1_info">
                                             <thead>
-                                                <tr>
-                                                    <th>id</th>
-                                                    <th>Ad Soyad</th>
-                                                    <th>Öğrenci No</th>
-                                                    <th>E-Posta</th>
-                                                    <th>İşlemler</th>
-                                                </tr>
+                                            <tr>
+                                                <th>id</th>
+                                                <th>Full Name</th>
+                                                <th>Student Number</th>
+                                                <th>Student Email</th>
+                                                <th>Approval</th>
+                                                <th>Telephone Number</th>
+                                                <th>Transactions</th>
+                                            </tr>
                                             </thead>
                                             <tbody>
                                             <?php
-                                            $query=$db->query("SELECT kullanicilar.id,ad,soyad,email,ogrenci_no FROM kullanicilar INNER JOIN ogrenci_detay ON ogrenci_detay.ogrenci_id=kullanicilar.id");
-                                            $personeller = $query->fetchAll(PDO::FETCH_ASSOC);
+
+
+                                            $query=$db->prepare("SELECT Internship_Registration.id as kayit_id,ad,soyad,ogrenci_no,tel,email,users.id as k_id,danisman_onay  FROM Internship_Registration
+INNER JOIN student_details ON Internship_Registration.ogrenci_id=student_details.ogrenci_id
+INNER JOIN users ON Internship_Registration.ogrenci_id=users.id
+WHERE student_details.danisman_id_fk=:danisman_id");
+                                            $query->execute([
+                                                    "danisman_id"=>$_SESSION["users"]["id"]
+                                            ]);
+                                            $Staff = $query->fetchAll(PDO::FETCH_ASSOC);
+                                            //print_r($Staff);
                                             ?>
 
-                                            <?php foreach ($personeller as $personel): ?>
+                                            <?php foreach ($Staff as $personel): ?>
                                                 <tr>
-                                                    <td><?php echo $personel["id"]; ?></td>
+                                                    <td><?php echo $personel["kayit_id"]; ?></td>
                                                     <td><?php echo $personel["ad"]." ".$personel["soyad"]; ?></td>
                                                     <td><?php echo $personel["ogrenci_no"] ?></td>
-                                                    <td><?php echo $personel["email"]; ?></td>
+                                                    <td><?php echo $personel["email"] ?></td>
                                                     <td>
-                                                        <a class="btn btn-danger" href="<?php echo "../ajax/per_ogr_sil.php?id=".$personel["id"]; ?>">Sil</a>
+
+                                                        <?php if ($personel["danisman_onay"]==1) { ?>
+                                                            <div class="alert-success p-2" role="alert">
+                                                            Confirmed
+                                                            </div>
+                                                        <?php } else { ?>
+                                                            <div class="alert-warning p-2 text-white" role="alert">
+                                                                Expected
+                                                            </div>
+                                                        <?php } ?>
+
+
+                                                    </td>
+                                                    <td><?php echo $personel["tel"]; ?></td>
+                                                    <td>
+                                                        <a class="btn btn-info" href="<?php echo "../ogrenci/pdf/index.php?id=".$personel["k_id"]; ?>">Show Details</a>
+
                                                     </td>
                                                 </tr>
                                             <?php endforeach; ?>
@@ -247,9 +220,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <label for="inputCity">Bölüm:</label>
+                                    <label for="inputCity">Section:</label>
                                     <select id="inputCity" name="bolum" class="form-control">
-                                        <?php foreach ($bolumler as $bolum): ?>
+                                        <?php foreach ($department as $bolum): ?>
                                             <option value="<?php echo $bolum["id"] ?>"><?php echo $bolum["bolum_ad"]; ?></option>
                                         <?php endforeach;?>
 
@@ -259,7 +232,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     <label for="inputState">Ünvan:</label>
                                     <select id="inputState" name="unvan" class="form-control">
 
-                                        <?php foreach ($unvanlar as $unvan): ?>
+                                        <?php foreach ($titles as $unvan): ?>
                                             <option value="<?php echo $unvan["id"]; ?>"><?php echo $unvan["unvan_ad"]; ?></option>
                                         <?php endforeach;?>
                                     </select>
@@ -329,12 +302,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
             var table = $('#example1').DataTable({
                 responsive: true,
                 lengthChange: false,
+
                 language: {
                     "url": "//cdn.datatables.net/plug-ins/1.11.5/i18n/tr.json"
                 },
                 columnDefs: [
                     {targets:[0],visible:false},
-                    {targets:[3],searchable:false}
+                    {targets:[3],searchable:false},
+
                 ],
                 autoWidth: false,
                 buttons: [{
@@ -352,40 +327,52 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     exportOptions: {
                         columns: ':visible'
                     }
-                }, "colvis"],
+                }, "colvis",
+                    {
+                        extend: 'collection',
+                        text: 'Filter',
+                        buttons: [
+                            {
+                                text: 'Tümü',
+                                action: function ( e, dt, node, config ) {
+                                    location.reload();
+                                }
+                            },
+                            {
+                                text: 'Onaylanan',
+                                action: function ( e, dt, node, config ) {
+                                    table.columns(4).search( "Confirmed" ).draw();
+                                }
+                            },
+                            {
+                                text: 'İşlem Bekleyen',
+                                action: function ( e, dt, node, config ) {
+                                    table.columns(4).search( "Expected" ).draw();
+                                }
+                            }
+                        ],
+                        dropup: true,
+
+                    }],
 
                 initComplete: function () {
                     setTimeout(function () {
                         table.buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
                     }, 10);
                 }
             });
+
+
         });
 
-        $("#kaydet").click(function () {
-            $("#personel_kaydet").submit();
-            
-        });
-        $("#bolum").change(function () {
-            let bolum_id = $(this).val();
-          $.ajax({
-            type : 'POST',
-            url : '../ajax/form_data.php',
-            data:{
-                bolum_id:bolum_id
-            },
-            success:function(data) {
-                $("#danisman").html(data);
-                console.log(data);
-            }
-          })
-        });
+
     </script>
 
 
-</body>
+    </body>
 
-</html>
+    </html>
 
 <?php }else{
     header("Location:../index.php");

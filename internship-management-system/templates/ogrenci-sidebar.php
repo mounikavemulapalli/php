@@ -1,7 +1,7 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="../student/index.php" class="brand-link">
-        <img src="../dist/img/comu_logo_4.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+    <a href="../ogrenci/index.php" class="brand-link">
+        <img src="../dist/img/the-entrepreneurship-network-cover.jpg" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
              style="opacity: 1">
         <span class="brand-text font-weight-light">Internship Tracking</span>
     </a>
@@ -15,12 +15,13 @@
             </div>
             <div class="info">
                 <?php
-                    $full_name = $_SESSION["user"]["first_name"]." ".$_SESSION["user"]["last_name"];
+                    $ad_soyad = $_SESSION["users"]["ad"]." ".$_SESSION["users"]["soyad"];
                 ?>
-                <a href="#" class="d-block"><?php echo $full_name; ?></a>
+                <a href="#" class="d-block"><?php echo $ad_soyad; ?></a>
             </div>
         </div>
-        -->
+ -->
+
 
         <!-- Sidebar Menu -->
         <nav class="mt-2">
@@ -28,10 +29,10 @@
                 <!-- Add icons to the links using the .nav-icon class
                    with font-awesome or any other icon font library -->
                 <li class="nav-item">
-                    <a href="../student/index.php" class="nav-link">
+                    <a href="../ogrenci/index.php" class="nav-link">
                         <i class="fa-solid fa-graduation-cap"></i>
                         <p>
-                            Internship Application
+                            Staj Başvurusu
 <!--                            <i class="right fas fa-angle-left"></i>-->
                         </p>
                     </a>
@@ -39,26 +40,27 @@
 <!--                        <li class="nav-item">-->
 <!--                            <a href="#" class="nav-link">-->
 <!--                                <i class="far fa-circle nav-icon"></i>-->
-<!--                                <p>Add/Edit Student</p>-->
+<!--                                <p>Öğrenci Ekle/Düzenle</p>-->
 <!--                            </a>-->
 <!--                        </li>-->
 <!--                        <li class="nav-item">-->
 <!--                            <a href="#" class="nav-link">-->
 <!--                                <i class="far fa-circle nav-icon"></i>-->
-<!--                                <p>Student</p>-->
+<!--                                <p>Öğrenci </p>-->
 <!--                            </a>-->
 <!--                        </li>-->
 <!--                    </ul>-->
                 </li>
 
                 <li class="nav-item">
-                    <a href="../student/application-status.php" class="nav-link">
+                    <a href="../ogrenci/basvuru-durum.php" class="nav-link">
                         <i class="fa-solid fa-building-columns"></i>
                         <p>
-                            My Application Status
+                            Başvuru Durumum
                         </p>
                     </a>
                 </li>
+
 
             </ul>
         </nav>

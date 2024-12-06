@@ -1,7 +1,7 @@
 <?php
 session_start();
 require "../config.php";
-if ($_SESSION["login"] && $_SESSION["kullanici"]["role_ad"] == "personel"){ ?>
+if ($_SESSION["login"] && $_SESSION["users"]["role_ad"] == "manager"){ ?>
 
 
     <!DOCTYPE html>
@@ -14,7 +14,7 @@ if ($_SESSION["login"] && $_SESSION["kullanici"]["role_ad"] == "personel"){ ?>
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Personel | ÇÖMÜ STAJ TAKİP</title>
+        <title>Yönetici | ÇÖMÜ STAJ TAKİP</title>
 
         <!-- Google Font: Source Sans Pro -->
         <link rel="stylesheet"
@@ -63,24 +63,24 @@ if ($_SESSION["login"] && $_SESSION["kullanici"]["role_ad"] == "personel"){ ?>
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Çıkış Yap</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Logout</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        Çıkış yapmak istediğinize emin misiniz ?
+                    Are you sure you want to log out?
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
-                        <a href="../cikis.php" type="button" class="btn btn-danger">Çıkış</a>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <a href="../cikis.php" type="button" class="btn btn-danger">Logout</a>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Main Sidebar Container -->
-        <?php include "../templates/personel-sidebar.php"?>
+        <?php include "../templates/yonetim-sidebar.php"?>
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
@@ -89,7 +89,7 @@ if ($_SESSION["login"] && $_SESSION["kullanici"]["role_ad"] == "personel"){ ?>
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1 class="m-0">Sigorta Giriş İşlemi</h1>
+                            <h1 class="m-0">Show the Internships</h1>
                         </div><!-- /.col -->
 <!--                        <div class="col-sm-6">-->
 <!--                            <ol class="breadcrumb float-sm-right">-->
@@ -122,36 +122,54 @@ if ($_SESSION["login"] && $_SESSION["kullanici"]["role_ad"] == "personel"){ ?>
                                             <thead>
                                             <tr>
                                                 <th>id</th>
-                                                <th>Ad Soyad</th>
-                                                <th>Öğrenci No</th>
-                                                <th>T.C Kimlik</th>
-                                                <th>Telefon No</th>
-                                                <th>İşlemler</th>
+                                                <th>Full Name</th>
+                                                <th>Student Number</th>
+                                                <th>Section</th>
+                                                <th>Student Email</th>
+                                                <th>Approval</th>
+                                                <th>Telephone Number</th>
+                                                <th>Transactions</th>
                                             </tr>
                                             </thead>
                                             <tbody>
                                             <?php
 
 
-                                            $query=$db->query("SELECT ad,soyad,email,tel,ogrenci_no,tc,staj_kayit.id as kayit_id FROM staj_kayit
-INNER JOIN staj_tarih ON staj_kayit.staj_tarih_id=staj_tarih.id
-INNER JOIN kullanicilar ON staj_kayit.ogrenci_id=kullanicilar.id
-INNER JOIN ogrenci_detay ON staj_kayit.ogrenci_id=ogrenci_detay.ogrenci_id
-WHERE NOW() BETWEEN staj_baslangic AND DATE_ADD(staj_baslangic, INTERVAL 7 DAY) AND sigorta_giris_onay=0");
+                                            $query=$db->query("SELECT internship_registration.id as kayit_id,ad,soyad,ogrenci_no,tel,email,users.id as k_id,mudur_onay,bolum_ad  FROM internship_registration
+INNER JOIN student_details ON internship_registration.ogrenci_id=student_details.ogrenci_id
+INNER JOIN users ON internship_registration.ogrenci_id=users.id
+INNER JOIN department ON student_details.bolum_id_fk=department.id
+WHERE internship_registration.danisman_onay=1");
 
-                                            $personeller = $query->fetchAll(PDO::FETCH_ASSOC);
-
+                                            $Staff = $query->fetchAll(PDO::FETCH_ASSOC);
+                                            //print_r($Staff);
                                             ?>
 
-                                            <?php foreach ($personeller as $personel): ?>
+                                            <?php foreach ($Staff as $personel): ?>
                                                 <tr>
                                                     <td><?php echo $personel["kayit_id"]; ?></td>
                                                     <td><?php echo $personel["ad"]." ".$personel["soyad"]; ?></td>
                                                     <td><?php echo $personel["ogrenci_no"] ?></td>
-                                                    <td><?php echo $personel["tc"] ?></td>
+                                                    <td><?php echo $personel["bolum_ad"] ?></td>
+                                                    <td><?php echo $personel["email"] ?></td>
+                                                    <td>
+
+                                                        <?php if ($personel["mudur_onay"]==1) { ?>
+                                                            <div class="alert-success p-2" role="alert">
+                                                                Confirmed
+                                                            </div>
+                                                        <?php } else { ?>
+                                                            <div class="alert-warning p-2 text-white" role="alert">
+                                                                Expected
+                                                            </div>
+                                                        <?php } ?>
+
+
+                                                    </td>
                                                     <td><?php echo $personel["tel"]; ?></td>
                                                     <td>
-                                                        <a class="btn btn-success" href="<?php echo "../ajax/sigorta_onay.php?sigorta_giris=".$personel["kayit_id"]; ?>">Onayla</a>
+                                                        <a class="btn btn-info" href="<?php echo "../ogrenci/pdf/index.php?id=".$personel["k_id"]; ?>">Show Details</a>
+
                                                     </td>
                                                 </tr>
                                             <?php endforeach; ?>
@@ -177,7 +195,7 @@ WHERE NOW() BETWEEN staj_baslangic AND DATE_ADD(staj_baslangic, INTERVAL 7 DAY) 
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Danışman Düzenleme</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Consultant Management</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -186,16 +204,16 @@ WHERE NOW() BETWEEN staj_baslangic AND DATE_ADD(staj_baslangic, INTERVAL 7 DAY) 
                         <form action="../ajax/danisman_duzenle.php" method="post" id="danisman_duzenle">
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <label for="inputEmail4">Ad:</label>
+                                    <label for="inputEmail4">Name:</label>
                                     <input type="text" name="ad" class="form-control" id="inputEmail4" placeholder="Ad">
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label for="inputPassword4">Soyad:</label>
+                                    <label for="inputPassword4">Last Name:</label>
                                     <input type="text" name="soyad" class="form-control" id="inputPassword4" placeholder="Soyad">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="inputAddress">E-Posta Adresi:</label>
+                                <label for="inputAddress">E-mail Address:</label>
                                 <input type="email" name="email" class="form-control" id="inputAddress" placeholder="xxxxx@comu.edu.com.tr">
                             </div>
 
@@ -203,19 +221,19 @@ WHERE NOW() BETWEEN staj_baslangic AND DATE_ADD(staj_baslangic, INTERVAL 7 DAY) 
 
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <label for="inputCity">Bölüm:</label>
+                                    <label for="inputCity">Section:</label>
                                     <select id="inputCity" name="bolum" class="form-control">
-                                        <?php foreach ($bolumler as $bolum): ?>
+                                        <?php foreach ($department as $bolum): ?>
                                             <option value="<?php echo $bolum["id"] ?>"><?php echo $bolum["bolum_ad"]; ?></option>
                                         <?php endforeach;?>
 
                                     </select>
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label for="inputState">Ünvan:</label>
+                                    <label for="inputState">Title:</label>
                                     <select id="inputState" name="unvan" class="form-control">
 
-                                        <?php foreach ($unvanlar as $unvan): ?>
+                                        <?php foreach ($titles as $unvan): ?>
                                             <option value="<?php echo $unvan["id"]; ?>"><?php echo $unvan["unvan_ad"]; ?></option>
                                         <?php endforeach;?>
                                     </select>
@@ -226,8 +244,8 @@ WHERE NOW() BETWEEN staj_baslangic AND DATE_ADD(staj_baslangic, INTERVAL 7 DAY) 
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
-                        <button type="button" class="btn btn-primary">Değişiklikleri Kaydet</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary">Save Changes</button>
                     </div>
                 </div>
             </div>
@@ -247,10 +265,8 @@ WHERE NOW() BETWEEN staj_baslangic AND DATE_ADD(staj_baslangic, INTERVAL 7 DAY) 
             <!-- To the right -->
 
             <!-- Default to the left -->
-            <strong>Copyright &copy; 2022-2023 <a href="https://www.comu.edu.tr/">Çanakkale 18 Mart
-                    Üniversitesi</a>.</strong>
-            Tüm
-            Hakları Saklıdır.
+            <strong>Copyright &copy; 2022-2023 <a href="https://www.comu.edu.tr/">TEN Network</a>.</strong>
+                    All Rights Reserved.
         </footer>
     </div>
     <!-- ./wrapper -->
@@ -284,43 +300,72 @@ WHERE NOW() BETWEEN staj_baslangic AND DATE_ADD(staj_baslangic, INTERVAL 7 DAY) 
         $(document).ready(function () {
             var table = $('#example1').DataTable({
                 responsive: true,
-                lengthChange: true,
+                lengthChange: false,
+
                 language: {
                     "url": "//cdn.datatables.net/plug-ins/1.11.5/i18n/tr.json"
                 },
                 columnDefs: [
                     {targets:[0],visible:false},
-                    {targets:[3],searchable:false}
+                    {targets:[3],searchable:false},
+
                 ],
                 autoWidth: false,
+                buttons: [{
+                    extend: 'excel',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },   {
+                    extend: 'pdf',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },  {
+                    extend: 'print',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                }, "colvis",
+                    {
+                        extend: 'collection',
+                        text: 'Filter',
+                        buttons: [
+                            {
+                                text: 'All',
+                                action: function ( e, dt, node, config ) {
+                                    location.reload();
+                                }
+                            },
+                            {
+                                text: 'Approved',
+                                action: function ( e, dt, node, config ) {
+                                    table.columns(5).search( "Confirmed" ).draw();
+                                }
+                            },
+                            {
+                                text: 'Pending',
+                                action: function ( e, dt, node, config ) {
+                                    table.columns(5).search( "Expected" ).draw();
+                                }
+                            }
+                        ],
+                        dropup: true,
 
+                    }],
 
                 initComplete: function () {
                     setTimeout(function () {
-                        //table.buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+                        table.buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
                     }, 10);
                 }
             });
-        });
 
-        $("#kaydet").click(function () {
-            $("#personel_kaydet").submit();
 
         });
-        $("#bolum").change(function () {
-            let bolum_id = $(this).val();
-            $.ajax({
-                type : 'POST',
-                url : '../ajax/form_data.php',
-                data:{
-                    bolum_id:bolum_id
-                },
-                success:function(data) {
-                    $("#danisman").html(data);
-                    console.log(data);
-                }
-            })
-        });
+
+
     </script>
 
 

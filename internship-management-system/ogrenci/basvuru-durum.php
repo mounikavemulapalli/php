@@ -1,6 +1,6 @@
 <?php
 session_start();
-if ($_SESSION["login"] && $_SESSION["kullanici"]["role_ad"] == "öğrenci"){ ?>
+if ($_SESSION["login"] && $_SESSION["users"]["role_ad"] == "öğrenci"){ ?>
 
     <!DOCTYPE html>
     <!--
@@ -87,8 +87,8 @@ if ($_SESSION["login"] && $_SESSION["kullanici"]["role_ad"] == "öğrenci"){ ?>
                         </div><!-- /.col -->
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="#">Anasayfa</a></li>
-                                <li class="breadcrumb-item active">Gösterge Paneli</li>
+                                <li class="breadcrumb-item"><a href="#">Home Page</a></li>
+                                <li class="breadcrumb-item active">Dashboard</li>
                             </ol>
                         </div><!-- /.col -->
                     </div><!-- /.row -->
@@ -103,11 +103,11 @@ if ($_SESSION["login"] && $_SESSION["kullanici"]["role_ad"] == "öğrenci"){ ?>
                         <thead>
                         <tr>
 
-                            <th scope="col">Ad Soyad</th>
-                            <th scope="col">Müdür Onay </th>
+                            <th scope="col">Full Name</th>
+                            <th scope="col">manager Onay </th>
                             <th scope="col">Danışman Onay </th>
                             <th scope="col">Oluşturulma Tarihi</th>
-                            <th scope="col">İşlemler</th>
+                            <th scope="col">Transactions</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -116,14 +116,14 @@ if ($_SESSION["login"] && $_SESSION["kullanici"]["role_ad"] == "öğrenci"){ ?>
 
                             require "../config.php";
 
-                            $query = $db->prepare("SELECT concat(kullanicilar.ad,\" \",kullanicilar.soyad) as ad_soyad,staj_kayit.mudur_onay,staj_kayit.danisman_onay,staj_kayit.create_tarih,staj_tarih.id  FROM staj_kayit
-INNER JOIN kullanicilar ON kullanicilar.id=staj_kayit.ogrenci_id
-INNER JOIN ogrenci_detay ON ogrenci_detay.ogrenci_id=staj_kayit.ogrenci_id
-INNER JOIN staj_tarih ON staj_tarih.id=staj_kayit.staj_tarih_id
-INNER JOIN sosyal_guvence ON sosyal_guvence.id=staj_kayit.sigorta
-INNER JOIN donemler ON staj_tarih.donem_id=donemler.id WHERE kullanicilar.id =:id");
+                            $query = $db->prepare("SELECT concat(users.ad,\" \",users.soyad) as ad_soyad,Internship_Registration.mudur_onay,Internship_Registration.danisman_onay,Internship_Registration.create_tarih,Internship_date.id  FROM Internship_Registration
+INNER JOIN users ON users.id=Internship_Registration.ogrenci_id
+INNER JOIN student_details ON student_details.ogrenci_id=Internship_Registration.ogrenci_id
+INNER JOIN Internship_date ON Internship_date.id=Internship_Registration.Internship_date_id
+INNER JOIN social_security ON social_security.id=Internship_Registration.sigorta
+INNER JOIN terms ON Internship_date.donem_id=terms.id WHERE users.id =:id");
                             $query->execute([
-                                    "id"=>$_SESSION["kullanici"]["id"]
+                                    "id"=>$_SESSION["users"]["id"]
                             ]);
                             $kayitlar=$query->fetchAll();
 
@@ -136,25 +136,25 @@ INNER JOIN donemler ON staj_tarih.donem_id=donemler.id WHERE kullanicilar.id =:i
                             <td>
                                 <?php
                                 if ($kayit["mudur_onay"]==0){
-                                    echo "<span class=\"text-danger font-weight-bold\">Onaylanmadı</span>";
+                                    echo "<span class=\"text-danger font-weight-bold\">Not Approved</span>";
                                 }else{
-                                    echo "<span class=\"text-success font-weight-bold\">Onaylandı</span>";
+                                    echo "<span class=\"text-success font-weight-bold\">Confirmed</span>";
                                 }
                                 ?>
                             </td>
                             <td>
                                 <?php
                                 if ($kayit["danisman_onay"]==0){
-                                    echo "<span class=\"text-danger font-weight-bold\">Onaylanmadı</span>";
+                                    echo "<span class=\"text-danger font-weight-bold\">Not Approved</span>";
                                 }else{
-                                    echo "<span class=\"text-success font-weight-bold\">Onaylandı</span>";
+                                    echo "<span class=\"text-success font-weight-bold\">Confirmed</span>";
                                 }
                                 ?>
                             </td>
                             <td><?= $kayit["create_tarih"]; ?></td>
                             <td>
-                                <a class="btn btn-info" href="<?php echo "pdf/index.php?id=".$_SESSION["kullanici"]["id"] ?>" >Dosyayı İndir</a>
-                                <a class="btn btn-danger" href="<?php echo "../ajax/staj_kayit_sil.php?id=".$kayit["id"]?>" >Sil</a>
+                                <a class="btn btn-info" href="<?php echo "pdf/index.php?id=".$_SESSION["users"]["id"] ?>" >Dosyayı İndir</a>
+                                <a class="btn btn-danger" href="<?php echo "../ajax/Internship_Registration_sil.php?id=".$kayit["id"]?>" >Sil</a>
                             </td>
                         </tr>
                         <?php endforeach; ?>
@@ -176,7 +176,7 @@ INNER JOIN donemler ON staj_tarih.donem_id=donemler.id WHERE kullanicilar.id =:i
             <!-- To the right -->
 
             <!-- Default to the left -->
-            <strong>Copyright &copy; 2022-2023 <a href="https://www.comu.edu.tr/">Çanakkale 18 Mart Üniversitesi</a>.</strong>
+            <strong>Copyright &copy; 2022-2023 <a href="https://www.comu.edu.tr/">TEN Network</a>.</strong>
             Tüm
             Hakları Saklıdır.
         </footer>

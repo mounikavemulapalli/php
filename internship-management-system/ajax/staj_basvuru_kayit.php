@@ -9,7 +9,7 @@ if (isset($_POST)){
     $tc = $_POST["tc"];
     $tel = $_POST["tel"];
 
-    $staj_tarih = $_POST["staj_tarih"];
+    $Internship_date = $_POST["Internship_date"];
     $sigorta = $_POST["sigorta"];
     $adres = $_POST["adres"];
 
@@ -23,14 +23,14 @@ if (isset($_POST)){
     $k_webadres = $_POST["k_webadres"];
 
 
-    $query=$db->prepare("INSERT INTO staj_kayit (ogrenci_id,tc,tel,staj_tarih_id,sigorta,adres,k_ad,k_adres,k_hizmet_alan,k_no,k_faks_no,k_eposta,k_webadres) VALUES (:ogrenci_id,:tc,:tel,:staj_tarih_id,:sigorta,:adres,:k_ad,:k_adres,:k_hizmet_alan,:k_no,:k_faks_no,:k_eposta,:k_webadres)");
+    $query=$db->prepare("INSERT INTO Internship_Registration (ogrenci_id,tc,tel,Internship_date_id,sigorta,adres,k_ad,k_adres,k_hizmet_alan,k_no,k_faks_no,k_eposta,k_webadres) VALUES (:ogrenci_id,:tc,:tel,:Internship_date_id,:sigorta,:adres,:k_ad,:k_adres,:k_hizmet_alan,:k_no,:k_faks_no,:k_eposta,:k_webadres)");
 
     $query->execute([
         "ogrenci_id"=>$id,
         "tc"=>$tc,
         "tel"=>$tel,
 
-        "staj_tarih_id"=>$staj_tarih,
+        "Internship_date_id"=>$Internship_date,
         "sigorta"=>$sigorta,
         "adres"=>$adres,
 

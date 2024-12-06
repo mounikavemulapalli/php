@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>MYO Internship Directive</title>
+      <title>MYO Staj Yönergesi</title>
     <style>
 
       *,
@@ -14,7 +14,7 @@
         box-sizing: border-box;
         padding: 0;
         margin: 0;
-        font-family: "DejaVu Sans", sans-serif;
+          font-family: "DejaVu Sans", sans-serif;
       }
 
       table {
@@ -60,68 +60,74 @@
   </head>
 
   <body>
-    <img src="logo.png" alt="" width="80" height="80" class="logo" />
+    <img src="logo.png"  alt="" width="80" height="80" class="logo" />
     <h2 class="header">
-      CANAKKALE ONSEKIZ MART UNIVERSITY <br />
-      CANAKKALE SOCIAL SCIENCES VOCATIONAL SCHOOL <br />
-      INTERNSHIP APPLICATION AND ACCEPTANCE FORM
+      ÇANAKKALE ONSEKİZ MART ÜNİVERSİTESİ <br />
+      ÇANAKKALE SOSYAL BİLİMLER MESLEK YÜKSEKOKULU <br />
+      STAJ BAŞVURU VE KABUL FORMU
     </h2>
 
-    <span>To the Relevant Authority,</span>
+    <span>İlgili Makama,</span>
     <p>
-      Students of our Vocational School are required to complete internships at institutions and enterprises during their education program until the end of their study period.
+      Meslek Yüksekokulumuz öğrencilerinin, Eğitim-Öğretim programlarımız gereği
+      öğrenim süresi sonuna kadar, kuruluş ve işletmelerde staj yapma
+      zorunluluğu bulunmaktadır.
     </p>
     <p>
-      If the internship of our student, who is required to complete an internship, is accepted by your institution, the commencement, termination, and notification obligations regarding social security, as per the "Social Security and General Health Insurance Law No. 5510," will be handled by our Institution.
+      Zorunlu olarak staja tâbi tutulan öğrencimizin stajını kuruluşunuzda
+      yapmasının tarafınızdan kabul edilmesi durumunda, 5510 Sayılı “Sosyal
+      Sigortalar ve Genel Sağlık Sigortası Kanunu” gereği sigortalılığın
+      başlangıcı, sona ermesi ve bildirim yükümlülüğü Kurumumuz tarafından
+      yapılacaktır
     </p>
 
     <table>
       <tr>
-        <td>Name Surname</td>
+        <td>Adı Soyadı</td>
         <td colspan="3"><?=$kayitlar["ad_soyad"]?></td>
       </tr>
       <tr>
-        <td>Student Number</td>
+        <td>Öğrenci Numarası</td>
         <td><?=$kayitlar["ogrenci_no"]?></td>
-        <td>Academic Year</td>
+        <td>Öğretim Yılı</td>
         <td><?=$kayitlar["donem_yil"]?></td>
       </tr>
       <tr>
-        <td>Turkish ID Number</td>
+        <td>T.C. Numarası</td>
         <td><?=$kayitlar["tc"]?></td>
-        <td>Phone Number</td>
+        <td>Telefon Numarası</td>
         <td><?=$kayitlar["tel"]?></td>
       </tr>
 
       <tr>
-        <td>Department</td>
+        <td>Section</td>
         <td colspan="3"><?=$kayitlar["bolum_ad"]?></td>
       </tr>
 
       <tr>
-        <td>Email Address</td>
+        <td>E-posta Adresi</td>
         <td colspan="3"><?=$kayitlar["email"]?></td>
       </tr>
 
       <tr>
-        <td>Residential Address</td>
+        <td>İkametgâh Adresi</td>
         <td colspan="3">
             <?=$kayitlar["adres"]?>
         </td>
       </tr>
 
-      <tr>
-          <td>Does the student have social security?</td>
-          <td colspan="3"><?=$kayitlar["ad"]?></td>
-      </tr>
+        <tr>
+            <td>Sosyal Güvencesi var mı?</td>
+            <td colspan="3"><?=$kayitlar["ad"]?></td>
+        </tr>
 
       <tr>
-        <td>Internship Start Date</td>
+        <td>Staja Başlama Tarihi</td>
         <td colspan="2"><?=$kayitlar["staj_baslangic"]?></td>
-        <td>Weekly Workdays</td>
+        <td>Haftalık Çalışma Gün Sayısı</td>
       </tr>
       <tr>
-        <td>Internship End Date</td>
+        <td>Staja Başlama Tarihi</td>
         <td colspan="2"><?=$kayitlar["staj_bitis"]?></td>
         <td><?=$kayitlar["haftalik_gun_sayi"]?></td>
       </tr>
@@ -129,76 +135,85 @@
 
     <table>
         <tr>
-            <th colspan="4">INTERNSHIP WORKPLACE (TO BE FILLED OUT BY THE WORKPLACE)</th>
+            <th colspan="4">STAJ YAPILAN İŞ YERİNİN (İŞ YERİ TARAFINDAN DOLDURULUCAK)</th>
         </tr>
         <tr>
-            <td>Institution Name</td>
+            <td>Kurumun Adı</td>
             <td colspan="3"><?=$kayitlar["k_ad"]?></td>
         </tr>
         <tr>
-            <td>Address</td>
+            <td>Adresi</td>
             <td colspan="3"><?=$kayitlar["k_adres"]?></td>
         </tr>
         <tr>
-            <td>Service Area</td>
+            <td>Hizmet Alanı</td>
             <td colspan="3"><?=$kayitlar["k_hizmet_alan"]?></td>
         </tr>
 
+
         <tr>
-            <td>Phone Number</td>
+            <td>Telephone Number</td>
             <td><?=$kayitlar["k_no"]?></td>
-            <td>Fax Number</td>
+            <td>Faks No.</td>
             <td><?=$kayitlar["k_faks_no"]?></td>
         </tr>
         <tr>
-            <td>Email Address</td>
+            <td>E-Posta Adresi</td>
             <td><?=$kayitlar["k_eposta"]?></td>
-            <td>Website Address</td>
+            <td>Web Adresi</td>
             <td><?=$kayitlar["k_webadres"]?></td>
         </tr>
 
+
     </table>
 
     <table>
         <tr>
-            <th colspan="4">INSTITUTION AUTHORIZED PERSON (TO BE FILLED OUT BY THE WORKPLACE)</th>
+            <th colspan="4">KURUM YETKİLİSİNİN (İŞ YERİ TARAFINDAN DOLDURULUCAK)</th>
         </tr>
         <tr>
-            <td>Name Surname</td>
+            <td>Adı Soyadı</td>
             <td></td>
-            <td rowspan="3" class="text_center">Signature / Seal</td>
+            <td rowspan="3" class="text_center">İmza / Kaşe</td>
             <td rowspan="3"></td>
         </tr>
         <tr>
-            <td>Position/Title</td>
+            <td>Görevi/ Unvanı</td>
             <td></td>
         </tr>
 
         <tr>
-            <td>Date</td>
+            <td>Tarih</td>
             <td></td>
         </tr>
+
 
     </table>
 
     <table>
         <tr>
-            <th>STUDENT</th>
-            <th>ADVISOR</th>
-            <th>INTERNSHIP COMMISSION PRESIDENT</th>
-            <th>SOCIAL INSURANCE ENTRY</th>
+            <th>ÖĞRENCİ</th>
+            <th>DANIŞMAN</th>
+            <th>STAJ KOMİSYONU BAŞKANI</th>
+            <th>SİGORTA GİRİŞİ</th>
         </tr>
         <tr>
             <td>
-                I hereby commit to completing my internship at the above-mentioned institution/workplace within the specified dates of 30 working days. I agree not to do my internship outside of these dates, and I understand that my internship will be canceled if this condition is violated.
+                Yukarıda adı geçen kurum/işyerinde,
+                belirtilen tarihler arasında 30 işgünü
+                stajımı yapacağımı, bu tarihler dışında
+                staj yapmayacağımı taahhüt eder, aksi
+                durumda stajımın iptal edileceğini
+                kabul ederim.
             </td>
             <td></td>
             <td></td>
             <td></td>
+
         </tr>
 
         <tr>
-            <td>Student Name Surname:</td>
+            <td>Öğrencinin Adı Soyadı:</td>
             <td>Approval</td>
             <td>Approval</td>
             <td>Approval</td>
@@ -210,16 +225,17 @@
             <td></td>
         </tr>
         <tr>
-            <td>Date:</td>
-            <td>Date:</td>
-            <td>Date:</td>
-            <td>Date:</td>
+            <td>Tarih:</td>
+            <td>Tarih:</td>
+            <td>Tarih:</td>
+            <td>Tarih:</td>
         </tr>
         <tr>
-            <td>Signature:</td>
+            <td>İmza:</td>
             <td></td>
             <td></td>
             <td></td>
+
         </tr>
 
     </table>

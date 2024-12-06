@@ -2,54 +2,65 @@
 require "../config.php";
 
 if (isset($_POST["datas"])){
-    $week_hour = $_POST["datas"]["hafta_saat"];
-    $term_id = $_POST["datas"]["yil"];
+    $hafta_saat = $_POST["datas"]["hafta_saat"];
+    $donem_id = $_POST["datas"]["yil"];
 
-    $query = $db->prepare("SELECT id, DATE_FORMAT(internship_start, \"%d.%m.%Y\") as internship_start, DATE_FORMAT(internship_end, \"%d.%m.%Y\") as internship_end FROM internship_dates WHERE internship_dates.term_id = :term_id AND internship_dates.weekly_day_count = :week_hour;");
+    $query= $db->prepare("SELECT id,DATE_FORMAT(staj_baslangic, \"%d.%m.%Y\") as staj_baslangic,DATE_FORMAT(staj_bitis, \"%d.%m.%Y\") as staj_bitis FROM Internship_date WHERE Internship_date.donem_id=:donem_id AND Internship_date.haftalik_gun_sayi=:hafta_sayi;");
     $query->execute([
-        "term_id" => $term_id,
-        "week_hour" => $week_hour,
+        "donem_id"=>$donem_id,
+        "hafta_sayi"=>$hafta_saat,
     ]);
 
-    $dates = $query->fetchAll();
+    $tarihler = $query->fetchAll();
 
-    echo "<option value='err'>Please Select Start Date</option>";
-    foreach ($dates as $date){
-        echo "<option value={$date["id"]}>{$date["internship_start"]}</option>";
+    echo "<option value='err'>Başlangıç Tarihi Seçiniz</option>";
+    foreach ($tarihler as $tarih){
+        echo "<option value={$tarih["id"]}>{$tarih["staj_baslangic"]}</option>";
     }
 
 }
 
-if (isset($_POST["internship_date_id"])){
-    $id = $_POST["internship_date_id"];
 
-    $query = $db->prepare("SELECT id, DATE_FORMAT(internship_start, \"%d.%m.%Y\") as internship_start, DATE_FORMAT(internship_end, \"%d.%m.%Y\") as internship_end FROM internship_dates WHERE internship_dates.id = :id;");
+if (isset($_POST["Internship_date_id"])){
+    $id = $_POST["Internship_date_id"];
+
+    $query= $db->prepare("SELECT id,DATE_FORMAT(staj_baslangic,\"%d.%m.%Y\") as staj_baslangic,DATE_FORMAT(staj_bitis,\"%d.%m.%Y\") as staj_bitis FROM Internship_date WHERE Internship_date.id=:id;");
     $query->execute([
-        "id" => $id,
+        "id"=>$id,
     ]);
 
-    $dates = $query->fetchAll();
+    $tarihler = $query->fetchAll();
 
-    foreach ($dates as $date){
-        echo "<option value={$date["id"]}>{$date["internship_end"]}</option>";
+    foreach ($tarihler as $tarih){
+        echo "<option value={$tarih["id"]}>{$tarih["staj_bitis"]}</option>";
     }
 
 }
 
-if (isset($_POST["department_id"])){
-    $department_id = $_POST["department_id"];
 
-    $query = $db->prepare("SELECT CONCAT(titles.title_name, \" \", users.first_name, \" \", users.last_name) as full_name, users.id FROM advisor_details INNER JOIN users ON advisor_details.advisor_id = users.id INNER JOIN titles ON titles.id = advisor_details.title_id WHERE department_id = :id");
+if (isset($_POST["bolum_id"])){
+    $bolum_id= $_POST["bolum_id"];
+
+    $query=$db->prepare("SELECT concat(titles.unvan_ad,\" \",users.ad,\" \",users.soyad) as ad_soyad,users.id FROM advisor_details INNER JOIN users ON advisor_details.danisman_id=users.id INNER JOIN titles ON titles.id=advisor_details.title_id  WHERE bolum_id=:id");
 
     $query->execute([
-        "id" => $department_id
+        "id"=>$bolum_id
     ]);
 
-    $advisors = $query->fetchAll();
 
-    foreach ($advisors as $advisor){
-        echo "<option value={$advisor["id"]}>{$advisor["full_name"]}</option>";
+    $danismanlar=$query->fetchAll();
+
+
+    foreach ($danismanlar as $danisman){
+        echo "<option value={$danisman["id"]}>{$danisman["ad_soyad"]}</option>";
     }
+
+
 
 };
-?>
+
+
+
+
+
+
